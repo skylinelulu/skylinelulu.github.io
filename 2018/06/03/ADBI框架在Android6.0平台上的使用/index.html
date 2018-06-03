@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Android,hook,ADBI," />
 
 
 
@@ -79,16 +79,18 @@
 
 
 
-<meta name="description" content="在头顶上，有几千亿的光年。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="SkylineLulu">
-<meta property="og:url" content="https://skylinelulu.github.io/index.html">
+<meta name="description" content="环境：    Android 6.0 问题：    ADBI框架在Android5上可以稳定运行，但是在Android6.0中并不能得到函数在GOT表中保存的真正地址。Inline hook方式也会出现此问题，导致hook失败。 原因：    经过对hook框架的研读，参考了网上对Android5-6的变化，我发现Android6.0里面的GOT HOOK框架有改变，Android6的动态库加载的">
+<meta name="keywords" content="Android,hook,ADBI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ADBI框架在Android6.0平台上的使用">
+<meta property="og:url" content="https://skylinelulu.github.io/2018/06/03/ADBI框架在Android6.0平台上的使用/index.html">
 <meta property="og:site_name" content="SkylineLulu">
-<meta property="og:description" content="在头顶上，有几千亿的光年。">
+<meta property="og:description" content="环境：    Android 6.0 问题：    ADBI框架在Android5上可以稳定运行，但是在Android6.0中并不能得到函数在GOT表中保存的真正地址。Inline hook方式也会出现此问题，导致hook失败。 原因：    经过对hook框架的研读，参考了网上对Android5-6的变化，我发现Android6.0里面的GOT HOOK框架有改变，Android6的动态库加载的">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-06-03T07:34:07.466Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SkylineLulu">
-<meta name="twitter:description" content="在头顶上，有几千亿的光年。">
+<meta name="twitter:title" content="ADBI框架在Android6.0平台上的使用">
+<meta name="twitter:description" content="环境：    Android 6.0 问题：    ADBI框架在Android5上可以稳定运行，但是在Android6.0中并不能得到函数在GOT表中保存的真正地址。Inline hook方式也会出现此问题，导致hook失败。 原因：    经过对hook框架的研读，参考了网上对Android5-6的变化，我发现Android6.0里面的GOT HOOK框架有改变，Android6的动态库加载的">
 
 
 
@@ -118,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://skylinelulu.github.io/"/>
+  <link rel="canonical" href="https://skylinelulu.github.io/2018/06/03/ADBI框架在Android6.0平台上的使用/"/>
 
 
 
 
 
-  <title>SkylineLulu</title>
+  <title>ADBI框架在Android6.0平台上的使用 | SkylineLulu</title>
   
 
 
@@ -143,8 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -237,9 +238,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -269,9 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/03/ADBI框架在Android6.0平台上的使用/" itemprop="url">ADBI框架在Android6.0平台上的使用</a></h1>
+          <h1 class="post-title" itemprop="name headline">ADBI框架在Android6.0平台上的使用</h1>
         
 
         <div class="post-meta">
@@ -343,9 +342,7 @@
       
 
       
-        
-          
-            <p>环境：<br>    Android 6.0</p>
+        <p>环境：<br>    Android 6.0</p>
 <p>问题：<br>    ADBI框架在Android5上可以稳定运行，但是在Android6.0中并不能得到函数在GOT表中保存的真正地址。Inline hook方式也会出现此问题，导致hook失败。</p>
 <p>原因：<br>    经过对hook框架的研读，参考了网上对Android5-6的变化，我发现Android6.0里面的GOT HOOK框架有改变，Android6的动态库加载的基地址不再固定，即和/proc/id/maps里的地址不一致了。因此之前通过/proc/id/maps拿到的基地址不正确。</p>
 <p>解决思路：<br>    通过soinfo结构拿到load_bias来作为基地址去算got函数地址的偏移。就是将module_base改成load_bias。</p>
@@ -358,8 +355,6 @@
 <p>在Android6.0中，在inlineHook.c文件中同样添加上述soinfo的结构体定义，并修改find_name函数为：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">int find_name(pid_t pid, char *name, char *libn, unsigned long *addr, int syslib)</span><br><span class="line">&#123;</span><br><span class="line">	struct mm mm[1000];</span><br><span class="line">	unsigned long libcaddr;</span><br><span class="line">	int nmm;</span><br><span class="line">	char libc[1024];</span><br><span class="line">	symtab_t s;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (0 &gt; load_memmap(pid, mm, &amp;nmm)) &#123;</span><br><span class="line">		<span class="built_in">log</span>(<span class="string">"[-] cannot read memory map\n"</span>)</span><br><span class="line">		<span class="built_in">return</span> -1;</span><br><span class="line">	&#125; <span class="keyword">else</span> </span><br><span class="line">		<span class="built_in">log</span>(<span class="string">"[+] success load memory map"</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (0 &gt; find_libname(libn, libc, sizeof(libc), &amp;libcaddr, mm, nmm)) &#123;</span><br><span class="line">		<span class="built_in">log</span>(<span class="string">"[-] cannot find lib: %s\n"</span>, libn)</span><br><span class="line">		<span class="built_in">return</span> -1;</span><br><span class="line">	&#125; <span class="keyword">else</span> </span><br><span class="line">		<span class="built_in">log</span>(<span class="string">"[+] success find lib name: 0x%X"</span>, libcaddr)</span><br><span class="line"></span><br><span class="line">	<span class="built_in">log</span>(<span class="string">"[+] lib: &gt;%s&lt;\n"</span>, libc)</span><br><span class="line">	s = load_symtab(libc);</span><br><span class="line">	<span class="keyword">if</span> (!s) &#123;</span><br><span class="line">	 	<span class="built_in">log</span>(<span class="string">"[-] cannot read symbol table\n"</span>)</span><br><span class="line">		<span class="built_in">return</span> -1;</span><br><span class="line">	 &#125;<span class="keyword">else</span> <span class="built_in">log</span>(<span class="string">"[+] success read symbol table"</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (0 &gt; lookup_func_sym(s, name, addr)) &#123;</span><br><span class="line">		<span class="built_in">log</span>(<span class="string">"[-] cannot find function: %s\n"</span>, name)</span><br><span class="line">		<span class="built_in">return</span> -1;</span><br><span class="line">	&#125;<span class="keyword">else</span> <span class="built_in">log</span>(<span class="string">"[+] success find function: %s: addr - 0x%X, *addr - 0x%X"</span>, name, addr, *addr)</span><br><span class="line"></span><br><span class="line">	<span class="built_in">log</span>(<span class="string">"[+] libcaddr is 0x%X\n"</span>, libcaddr)</span><br><span class="line"></span><br><span class="line">	void *handle =  dlopen( LIBSF_PATH, RTLD_GLOBAL);</span><br><span class="line">    soinfo *si = (soinfo*)handle; </span><br><span class="line">    load_bias_addr = si-&gt;load_bias;</span><br><span class="line">	<span class="built_in">log</span>(<span class="string">"[+] load_bias_addr is 0x%X\n"</span>, load_bias_addr)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span>(syslib == 0)&#123;</span><br><span class="line">		*addr += libcaddr;</span><br><span class="line">	&#125;<span class="keyword">else</span> <span class="keyword">if</span>(syslib == 1)&#123;</span><br><span class="line">		*addr += load_bias_addr;</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="built_in">log</span>(<span class="string">"[-] parameter syslib is wrong !\n"</span>)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">return</span> 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>源码之后整理一下会放出来，有什么问题可以直接来问我~</p>
 
-          
-        
       
     </div>
     
@@ -374,305 +369,40 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://skylinelulu.github.io/2018/06/03/xposed-byte[]/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="SkylineLulu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="SkylineLulu">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/03/xposed-byte[]/" itemprop="url">xposed中函数参数byte[]类型数据读取</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-03T11:07:02+08:00">
-                2018-06-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
+            <a href="/tags/Android/" rel="tag"># Android</a>
           
-
+            <a href="/tags/hook/" rel="tag"># hook</a>
           
-            
+            <a href="/tags/ADBI/" rel="tag"># ADBI</a>
           
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>之前hook native函数是使用<a href="http://www.cnblogs.com/jiayy/p/4282123.html" target="_blank" rel="noopener">ADBI框架</a>的，但是其平台有限，Android5效果稳定，Android6成功率不高，到Android7就无法使用了。<br>由于xposed（已支持Android8）也可以Hook native函数，可获取native函数的参数数据，因此想将hook的函数从ADBI框架移植到xposed模块中。但是遇到了一个问题：之前使用ADBI框架获取byte[]类型的参数数据是正常的，但是在xposed中只能获取到地址，一直提示参数为object类型。那么如何在xposed中获得真实数据呢？解决方案<a href="http://www.cnblogs.com/shuqingstudy/p/5050639.html" target="_blank" rel="noopener">参考</a>如下。</p>
-<p>如下为ADBI框架中重写的函数，获取byte类型参数a的数据，并写入/sdcard/data.txt中。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">void new_hookData(JNIEnv* env, jobject thiz, jbyte *a) &#123;</span><br><span class="line"></span><br><span class="line">        jbyte *arrayBody = (*env)-&gt;GetByteArrayElements(env,a,NULL); </span><br><span class="line">        jsize len = (*env)-&gt;GetArrayLength(env,a); </span><br><span class="line">        byte *dDate = (byte *)arrayBody;</span><br><span class="line">        int fd = open(<span class="string">"/sdcard/data.txt"</span>, O_APPEND|O_RDWR|O_CREAT,S_IRWXU);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(fd &lt; 0)</span><br><span class="line">        &#123;</span><br><span class="line">            LOGI(<span class="string">"[+] open failed"</span>);</span><br><span class="line">            LOGW(<span class="string">"[+] error (errno=%d)"</span>, errno);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            LOGI(<span class="string">"[+] success open"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">            </span><br><span class="line">        int write_len = write(fd, dDate, len);</span><br><span class="line"></span><br><span class="line">        (*env)-&gt;ReleaseByteArrayElements(env,a,arrayBody,NULL);</span><br><span class="line">        close(fd);</span><br><span class="line"></span><br><span class="line">    old_hookData(env, thiz, a);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如下是xposed中的hook代码：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">findAndHookMethod(<span class="string">"className"</span>,lp.classLoader,<span class="string">"methodName"</span>,byte[].class, new hookData());</span><br><span class="line"></span><br><span class="line">class  hookData extends XC_MethodHook&#123;</span><br><span class="line">    protected void beforeHookedMethod(MethodHookParam param) throws Throwable &#123;</span><br><span class="line"></span><br><span class="line">        byte[] buf = (byte[])param.args[0];</span><br><span class="line">        FileHelper filehelper = new FileHelper();</span><br><span class="line">        try &#123;</span><br><span class="line">            //将byte数组写入文件</span><br><span class="line">            createFile(<span class="string">"/sdcard/data.txt"</span>, buf);</span><br><span class="line">        &#125; catch (IOException e) &#123;</span><br><span class="line">            // TODO Auto-generated catch block</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //将byte数组写入文件</span><br><span class="line">    public void createFile(String path, byte[] content) throws IOException &#123;</span><br><span class="line">        FileOutputStream fos = new FileOutputStream(path);</span><br><span class="line">        fos.write(content);</span><br><span class="line">        fos.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>over!</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
       
 
       
       
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
       
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://skylinelulu.github.io/2018/05/12/SUMSUNG-ROOT/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="SkylineLulu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="SkylineLulu">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/12/SUMSUNG-ROOT/" itemprop="url">三星s7 edge(G9350)刷机经验</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-12T21:09:32+08:00">
-                2018-05-12
-              </time>
+              <a href="/2018/06/03/xposed-byte[]/" rel="next" title="xposed中函数参数byte[]类型数据读取">
+                <i class="fa fa-chevron-left"></i> xposed中函数参数byte[]类型数据读取
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <p>设备：Sumsung S7 Edge<br>刷入系统: Android 7<br>刷机方式：线刷<br>需要安装包： 链接：<a href="https://pan.baidu.com/s/1N8U0KFikiGz_QFnfC9EUQg" target="_blank" rel="noopener">https://pan.baidu.com/s/1N8U0KFikiGz_QFnfC9EUQg</a> 密码：vuy0</p>
-<p>步骤：<br>1.刷系统。电脑端打开odin刷机软件。手机关机情况下，同时按住“音量键下”+“HOME键”+“开机键”进入开机模式，按照提示按下音量上键。按照顺序刷入五件套，即S7android7.0文件夹中的文件。<br><a href="http://www.netded.com/a/jingpinshouji/2016/0308/31334.html" target="_blank" rel="noopener">具体教程</a><br>2.解锁。进入系统，运行“三星解锁.apk”，进行解锁。<br>3.ROOT（参考：7.0ROOT步骤.txt）。再次关机，同时按住“音量键下”+“HOME键”+“开机键”进入开机模式，打开odin，AP刷入recovery，即G9350_7.0_QC1_twrp_kernel_su2.79.tar文件。在odin的options中去掉Auto Reboot的对勾。start。手机进入twrp模式，清除，格式化data分区，输入yes，重启手机。<br>备注：查看设置-关于手机-软件信息-版本号，我的手机的版本号后三位为QC1，因此采用该recovery文件。</p>
-<p>开机，adb shell, su，就可以看到设备已经ROOT，data也解密了。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -682,138 +412,11 @@
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://skylinelulu.github.io/2018/05/12/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="SkylineLulu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="SkylineLulu">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/12/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-12T20:14:09+08:00">
-                2018-05-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
 
 
           </div>
@@ -821,6 +424,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -841,8 +448,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -902,6 +518,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-GOT-hook-hook-c"><span class="nav-number">1.</span> <span class="nav-text">1.GOT hook(hook.c)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Inline-hook-inlineHook-c"><span class="nav-number">2.</span> <span class="nav-text">2.Inline hook(inlineHook.c)</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -1042,6 +674,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
