@@ -87,13 +87,14 @@
 <meta property="og:site_name" content="SkylineLulu">
 <meta property="og:description" content="小白在发博客时遇到了好多问题，就在这里记录一下吧~ 1.如何在博客中插入图片？参考文章 （1）把主页配置文件_config.yml 里的post_asset_folder选项设置为true（2）在hexo目录下执行命令：npm install hexo-asset-image –save，即下载安装可以上传本地图片的插件hexo-asset-image（3）再运行hexo n “xxx”来生成md">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://skylinelulu.github.io/2018/06/24/hexo-pic/2018/06/24/xxx/pic.jpg">
-<meta property="og:image" content="https://skylinelulu.github.io/2018/06/24/hexo-pic/xxx/pic.jpg">
-<meta property="og:updated_time" content="2018-06-24T08:59:36.636Z">
+<meta property="og:image" content="https://skylinelulu.github.io/2018/06/24/hexo-pic/0.jpg">
+<meta property="og:image" content="https://skylinelulu.github.io/2018/06/24/hexo-pic/1.jpg">
+<meta property="og:image" content="https://skylinelulu.github.io/2018/06/24/hexo-pic/2.jpg">
+<meta property="og:updated_time" content="2018-06-24T09:55:46.426Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hexo发博之路">
 <meta name="twitter:description" content="小白在发博客时遇到了好多问题，就在这里记录一下吧~ 1.如何在博客中插入图片？参考文章 （1）把主页配置文件_config.yml 里的post_asset_folder选项设置为true（2）在hexo目录下执行命令：npm install hexo-asset-image –save，即下载安装可以上传本地图片的插件hexo-asset-image（3）再运行hexo n “xxx”来生成md">
-<meta name="twitter:image" content="https://skylinelulu.github.io/2018/06/24/hexo-pic/2018/06/24/xxx/pic.jpg">
+<meta name="twitter:image" content="https://skylinelulu.github.io/2018/06/24/hexo-pic/0.jpg">
 
 
 
@@ -347,9 +348,9 @@
       
         <p>小白在发博客时遇到了好多问题，就在这里记录一下吧~</p>
 <p>1.如何在博客中插入图片？<a href="https://blog.csdn.net/Sugar_Rainbow/article/details/57415705" target="_blank" rel="noopener">参考文章</a></p>
-<p>（1）把主页配置文件_config.yml 里的post_asset_folder选项设置为true<br>（2）在hexo目录下执行命令：npm install hexo-asset-image –save，即下载安装可以上传本地图片的插件<a href="https://github.com/CodeFalling/hexo-asset-image" target="_blank" rel="noopener">hexo-asset-image</a><br>（3）再运行hexo n “xxx”来生成md博文时，/source/_posts文件夹内除了xxx.md文件还有一个同名的文件夹<br>（4）最后在xxx.md中想引入图片时，先把图片复制到xxx这个文件夹中，然后只需要在xxx.md中按照markdown的格式引入图片：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!\[你想输入的替代文字\](xxx/pic.jpg)</span><br></pre></td></tr></table></figure>
-<p>(5)检查一下，hexo g生成页面后，进入public\2018\06\24\index.html文件中查看相关字段，可以发现，html标签内的语句是<img src="/2018/06/24/hexo-pic/2018/06/24/xxx/pic.jpg">，而不是<img src="/2018/06/24/hexo-pic/xxx/pic.jpg"></p>
+<p>（1）把主页配置文件_config.yml 里的post_asset_folder选项设置为true<br>（2）在hexo目录下执行命令：npm install hexo-asset-image –save，即下载安装可以上传本地图片的插件<a href="https://github.com/CodeFalling/hexo-asset-image" target="_blank" rel="noopener">hexo-asset-image</a><br>（3）再运行hexo n “xxx”来生成md博文时，/source/_posts文件夹内除了xxx.md文件还有一个同名的文件夹<br>（4）最后在xxx.md中想引入图片时，先把图片复制到xxx这个文件夹中，然后只需要在xxx.md中按照markdown的格式引入图片：<br><img src="/2018/06/24/hexo-pic/0.jpg" alt="title"></p>
+<p>(5)检查一下，hexo g生成页面后，进入public\2018\06\24\index.html文件中查看相关字段，可以发现，html标签内的语句是<br><img src="/2018/06/24/hexo-pic/1.jpg" alt="title1"></p>
+<p>而不是<br><img src="/2018/06/24/hexo-pic/2.jpg" alt="title2"></p>
 <p>(6)最后, hexo d上传，OK！</p>
 
       
