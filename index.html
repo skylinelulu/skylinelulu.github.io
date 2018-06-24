@@ -252,7 +252,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://skylinelulu.github.io/2018/06/24/Z3-SMT-Windows/">
+    <link itemprop="mainEntityOfPage" href="https://skylinelulu.github.io/2018/06/24/Z3SMT/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="SkylineLulu">
@@ -271,7 +271,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/06/24/Z3-SMT-Windows/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2018/06/24/Z3SMT/" itemprop="url">Z3求解器在Windows下的安装</a></h1>
         
 
         <div class="post-meta">
@@ -283,7 +283,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-24T15:52:40+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-24T16:13:24+08:00">
                 2018-06-24
               </time>
             
@@ -293,6 +293,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tool/" itemprop="url" rel="index">
+                    <span itemprop="name">tool</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -323,14 +345,13 @@
       
         
           
-            <p>Z3求解器在Windows下的安装</p>
-<p><a href="https://github.com/Z3Prover/z3" target="_blank" rel="noopener">z3（github链接点这里）</a>是由微软公司开发的一个SMT求解器（定理证明器），能够检查逻辑表达式的可满足性。</p>
+            <p><a href="https://github.com/Z3Prover/z3" target="_blank" rel="noopener">z3（github链接点这里）</a>是由微软公司开发的一个SMT求解器（定理证明器），能够检查逻辑表达式的可满足性。</p>
 <p>环境： Visual Studio 2015 Command Prompt</p>
 <p>安装准备：</p>
 <ol>
-<li><p>配置Visual Studio Command Prompt：在Visual Studio的菜单栏中选择 工具-外部工具-添加<br><img src="external.png" alt="external"><br>参数为<br>标题：mycmd<br>命令：C:\Windows\System32\cmd.exe<br>参数：/k “D:\VS2015\Common7\Tools\VsDevCmd.bat”<br>初始目录：$(ProjectDir)<br><img src="mycmd.png" alt="mycmd"></p>
+<li><p>配置Visual Studio Command Prompt：在Visual Studio的菜单栏中选择 工具-外部工具-添加<br><img src="/2018/06/24/Z3SMT/external.png" alt="external"><br>参数为<br>标题：mycmd<br>命令：C:\Windows\System32\cmd.exe<br>参数：/k “D:\VS2015\Common7\Tools\VsDevCmd.bat”<br>初始目录：$(ProjectDir)<br><img src="/2018/06/24/Z3SMT/mycmd.png" alt="mycmd"></p>
 </li>
-<li><p>打开Visual Studio Command Prompt:电脑的开始-Visual Studio 2015-目录下有各种环境下的命令窗口，这里选择64位的。<br><img src="VSCommandPrompt.png" alt="VS"><br>安装过程：</p>
+<li><p>打开Visual Studio Command Prompt:电脑的开始-Visual Studio 2015-目录下有各种环境下的命令窗口，这里选择64位的。<br><img src="/2018/06/24/Z3SMT/VSCommandPrompt.png" alt="VS"><br>安装过程：</p>
 </li>
 <li>打开github上下载的Z3目录：cd F:\z3-master\z3-master</li>
 <li>若Visual Studio为32-bit builds：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python scripts/mk_make.py</span><br></pre></td></tr></table></figure>
@@ -340,7 +361,168 @@
 <ol start="3">
 <li><p>cd build</p>
 </li>
-<li><p>nmake<br>若提示“Z3 was successfully built.”就成功了<br><img src="success.png" alt="success"></p>
+<li><p>nmake<br>若提示“Z3 was successfully built.”就成功了<br><img src="/2018/06/24/Z3SMT/success.png" alt="success"></p>
+</li>
+</ol>
+<p>5.然后按照提示，新建 PYTHONPATH环境变量，将build/python目录添加到其中；并将build添加到path环境变量中。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://skylinelulu.github.io/2018/06/24/Z3-SMT-Windows/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="SkylineLulu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SkylineLulu">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/24/Z3-SMT-Windows/" itemprop="url">Z3求解器在Windows下的安装</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-24T16:09:13+08:00">
+                2018-06-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tool/" itemprop="url" rel="index">
+                    <span itemprop="name">tool</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://github.com/Z3Prover/z3" target="_blank" rel="noopener">z3（github链接点这里）</a>是由微软公司开发的一个SMT求解器（定理证明器），能够检查逻辑表达式的可满足性。</p>
+<p>环境： Visual Studio 2015 Command Prompt</p>
+<p>安装准备：</p>
+<ol>
+<li><p>配置Visual Studio Command Prompt：在Visual Studio的菜单栏中选择 工具-外部工具-添加<br><img src="/2018/06/24/Z3-SMT-Windows/img/external.png" alt="external"><br>参数为<br>标题：mycmd<br>命令：C:\Windows\System32\cmd.exe<br>参数：/k “D:\VS2015\Common7\Tools\VsDevCmd.bat”<br>初始目录：$(ProjectDir)<br><img src="/2018/06/24/Z3-SMT-Windows/img/mycmd.png" alt="mycmd"></p>
+</li>
+<li><p>打开Visual Studio Command Prompt:电脑的开始-Visual Studio 2015-目录下有各种环境下的命令窗口，这里选择64位的。<br><img src="/2018/06/24/Z3-SMT-Windows/img/VSCommandPrompt.png" alt="VS"><br>安装过程：</p>
+</li>
+<li>打开github上下载的Z3目录：cd F:\z3-master\z3-master</li>
+<li>若Visual Studio为32-bit builds：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python scripts/mk_make.py</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如果是64-bit build:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python scripts/mk_make.py -x</span><br></pre></td></tr></table></figure></p>
+<ol start="3">
+<li><p>cd build</p>
+</li>
+<li><p>nmake<br>若提示“Z3 was successfully built.”就成功了<br><img src="/2018/06/24/Z3-SMT-Windows/img/success.png" alt="success"></p>
 </li>
 </ol>
 <p>5.然后按照提示，新建 PYTHONPATH环境变量，将build/python目录添加到其中；并将build添加到path环境变量中。</p>
@@ -1259,7 +1441,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1270,7 +1452,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1281,7 +1463,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
