@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Windows IAT,hook," />
+  <meta name="keywords" content="Android,automata," />
 
 
 
@@ -79,18 +79,23 @@
 
 
 
-<meta name="description" content="这个之后详细再写出来">
-<meta name="keywords" content="Windows IAT,hook">
+<meta name="description" content="《Intersection Automata based model for Android Application Collusion》来源：AINA 2016 (CCF B)关键词：automata, Android, ICC Collusion Attack摘要：  本文针对安卓中存在的基于intent的ICC Collusion Attack，使用有限状态自动机方法从组件层面进行检测。">
+<meta name="keywords" content="Android,automata">
 <meta property="og:type" content="article">
-<meta property="og:title" content="64位Windows中IAT表的获取">
-<meta property="og:url" content="https://skylinelulu.github.io/2018/06/09/64位Windows中IAT表的获取/index.html">
+<meta property="og:title" content="Intersection Automata based model for Android Application Collusion">
+<meta property="og:url" content="https://skylinelulu.github.io/2018/08/23/Intersection Automata/index.html">
 <meta property="og:site_name" content="SkylineLulu">
-<meta property="og:description" content="这个之后详细再写出来">
+<meta property="og:description" content="《Intersection Automata based model for Android Application Collusion》来源：AINA 2016 (CCF B)关键词：automata, Android, ICC Collusion Attack摘要：  本文针对安卓中存在的基于intent的ICC Collusion Attack，使用有限状态自动机方法从组件层面进行检测。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-01T08:14:37.638Z">
+<meta property="og:image" content="https://skylinelulu.github.io/2018/08/23/Intersection%20Automata/Intersection/msg.jpg">
+<meta property="og:image" content="https://skylinelulu.github.io/2018/08/23/Intersection%20Automata/Intersection/application.jpg">
+<meta property="og:image" content="https://skylinelulu.github.io/2018/08/23/Intersection%20Automata/Intersection/policy.jpg">
+<meta property="og:image" content="https://skylinelulu.github.io/2018/08/23/Intersection%20Automata/Intersection/policy.jpg">
+<meta property="og:updated_time" content="2018-09-09T13:12:04.863Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="64位Windows中IAT表的获取">
-<meta name="twitter:description" content="这个之后详细再写出来">
+<meta name="twitter:title" content="Intersection Automata based model for Android Application Collusion">
+<meta name="twitter:description" content="《Intersection Automata based model for Android Application Collusion》来源：AINA 2016 (CCF B)关键词：automata, Android, ICC Collusion Attack摘要：  本文针对安卓中存在的基于intent的ICC Collusion Attack，使用有限状态自动机方法从组件层面进行检测。">
+<meta name="twitter:image" content="https://skylinelulu.github.io/2018/08/23/Intersection%20Automata/Intersection/msg.jpg">
 
 
 
@@ -120,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="https://skylinelulu.github.io/2018/06/09/64位Windows中IAT表的获取/"/>
+  <link rel="canonical" href="https://skylinelulu.github.io/2018/08/23/Intersection Automata/"/>
 
 
 
 
 
-  <title>64位Windows中IAT表的获取 | SkylineLulu</title>
+  <title>Intersection Automata based model for Android Application Collusion | SkylineLulu</title>
   
 
 
@@ -253,7 +258,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://skylinelulu.github.io/2018/06/09/64位Windows中IAT表的获取/">
+    <link itemprop="mainEntityOfPage" href="https://skylinelulu.github.io/2018/08/23/Intersection Automata/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="SkylineLulu">
@@ -270,7 +275,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">64位Windows中IAT表的获取</h1>
+          <h1 class="post-title" itemprop="name headline">Intersection Automata based model for Android Application Collusion</h1>
         
 
         <div class="post-meta">
@@ -282,8 +287,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-09T15:23:47+08:00">
-                2018-06-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-23T10:23:07+08:00">
+                2018-08-23
               </time>
             
 
@@ -305,8 +310,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Windows/" itemprop="url" rel="index">
-                    <span itemprop="name">Windows</span>
+                  <a href="/categories/Paper/" itemprop="url" rel="index">
+                    <span itemprop="name">Paper</span>
                   </a>
                 </span>
 
@@ -342,7 +347,15 @@
       
 
       
-        <p>这个之后详细再写出来</p>
+        <p>《Intersection Automata based model for Android Application Collusion》<br>来源：AINA 2016 (CCF B)<br>关键词：automata, Android, ICC Collusion Attack<br>摘要：<br>  本文针对安卓中存在的基于intent的ICC Collusion Attack，使用有限状态自动机方法从组件层面进行检测。  </p>
+<h2 id="1-针对问题："><a href="#1-针对问题：" class="headerlink" title="1.针对问题："></a>1.针对问题：</h2><p>Android 多个应用之间的互相调用和交互时存在ICC Collusion Attack</p>
+<p><strong>ICC Collusion Attack</strong>：两个应用之间的组件调用，但是两个应用所拥有的权限不同，因此应用A可以通过应用B可以获取不属于应用A的权限，导致权限提升问题。可以称之为组件间通信合谋攻击。</p>
+<p><strong>Treat Model</strong>：如下图(msgRead与msgSend应用之间存在提权攻击)所示，msgRead拥有接收短信和读取短信的权限，msgSend拥有写短信和发短信的权限，msgRead通过Intent与msgSend交互时，可能存在将短信内容通过intent发送给msgSend，导致隐私泄露。<br> <img src="/2018/08/23/Intersection Automata/Intersection/msg.jpg" alt="title"></p>
+<h2 id="2-contribution"><a href="#2-contribution" class="headerlink" title="2.contribution"></a>2.contribution</h2><p>（1）    第一个使用非确定性有限状态自动机来标识基于ICC的Intent,使用app之间的通讯和相关策略的制定来检测攻击<br>（2）    在组件层面分析（传统工作都基于应用或方法层面分析，不精确且应用范围小）<br>（3）    对21个app组合成的210对进行测试，成功检测<br>（4）    时间和内存都是线性的</p>
+<h2 id="3-Challenge"><a href="#3-Challenge" class="headerlink" title="3.Challenge"></a>3.Challenge</h2><p>（1）    App之间的ICC Collusion Attack检测比较难<br>（2）    ICC Collusion Attack与隐式intent相关联，如何将intent与隐私泄露结合，实际上需要考虑intent-component-permission这条链。<br>（3）    将app行为与定制的策略相结合</p>
+<h2 id="4-文章方法"><a href="#4-文章方法" class="headerlink" title="4.文章方法"></a>4.文章方法</h2><p>由于intent的发送者和接收者组件权限不相等，因此ICC Collusion Attack检测问题可以被视为字符串搜索和模式匹配问题。所以本文提出了组件层面的自动机检测方案。<br>该交叉自动机由两个自动机组成。提取两个app(A和B)中的调用图，如果A的组件发送一个Intent给应用B符合intent-filter的组件，则A和B之间使用边连接起来（application自动机）。检测这些边是否破坏了我们定义的安全权限策略（policy自动机）。<br>(1)application自动机<br>第一个是对app进行分析得到的Application自动机，描述函数和权限之间的关系，如图2(application自动机示意图)所示。<br>（1）首先提取app中的图，顶点代表所有的组件，定义intent的源组件和目标组件，边即连接源组件和目标组件。<br>（2）将两个app的顶点和边形成的图进行联合。<br>（3）减少与权限无关的边<br>（4）将图转换成自动机，该自动机大小为n（n是app中组件数量）。<br><img src="/2018/08/23/Intersection Automata/Intersection/application.jpg" alt="title"></p>
+<p>(2)policy自动机<br>第二个自动机描述权限和隐私泄露之间的关系，Collusion attack发生是因为危险权限以一定的顺序被使用，policy自动机如图3所示。<br><img src="/2018/08/23/Intersection Automata/Intersection/policy.jpg" alt="title"><br>最终的自动机结合了权限，函数调用和隐私泄露的policy，最终检测出ICC Collusion Attack，如图4(交叉自动机示意图)所示。<br><img src="/2018/08/23/Intersection Automata/Intersection/policy.jpg" alt="title"></p>
+<h2 id="5-evaluation"><a href="#5-evaluation" class="headerlink" title="5.evaluation"></a>5.evaluation</h2><p>数据来源：21个app（14app(自己设计)+ 3 app(DroidBench)+ 4app(Google Play)）<br>两两app进行组合，总210对app组<br>结果：21个app之间存在发送短信，泄露位置等隐私泄露现象。实验证明自动机状态数与分析的app组件数是线性关系。</p>
 
       
     </div>
@@ -360,9 +373,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Windows-IAT/" rel="tag"># Windows IAT</a>
+            <a href="/tags/Android/" rel="tag"># Android</a>
           
-            <a href="/tags/hook/" rel="tag"># hook</a>
+            <a href="/tags/automata/" rel="tag"># automata</a>
           
         </div>
       
@@ -375,8 +388,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/03/ADBI框架在Android6.0平台上的使用/" rel="next" title="ADBI框架在Android6.0平台上的使用">
-                <i class="fa fa-chevron-left"></i> ADBI框架在Android6.0平台上的使用
+              <a href="/2018/07/01/3D-CFG/" rel="next" title="Similarity of Android App Methods">
+                <i class="fa fa-chevron-left"></i> Similarity of Android App Methods
               </a>
             
           </div>
@@ -385,8 +398,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/06/24/Z3SMT/" rel="prev" title="Z3求解器在Windows下的安装">
-                Z3求解器在Windows下的安装 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/09/02/QQEmojiBug/" rel="prev" title="QQ表情-脏话bug漏洞">
+                QQ表情-脏话bug漏洞 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -439,8 +452,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -528,6 +550,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-针对问题："><span class="nav-number">1.</span> <span class="nav-text">1.针对问题：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-contribution"><span class="nav-number">2.</span> <span class="nav-text">2.contribution</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Challenge"><span class="nav-number">3.</span> <span class="nav-text">3.Challenge</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-文章方法"><span class="nav-number">4.</span> <span class="nav-text">4.文章方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-evaluation"><span class="nav-number">5.</span> <span class="nav-text">5.evaluation</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

@@ -400,6 +400,156 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://skylinelulu.github.io/2018/08/23/Intersection Automata/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="SkylineLulu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SkylineLulu">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/23/Intersection Automata/" itemprop="url">Intersection Automata based model for Android Application Collusion</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-23T10:23:07+08:00">
+                2018-08-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Paper/" itemprop="url" rel="index">
+                    <span itemprop="name">Paper</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>《Intersection Automata based model for Android Application Collusion》<br>来源：AINA 2016 (CCF B)<br>关键词：automata, Android, ICC Collusion Attack<br>摘要：<br>  本文针对安卓中存在的基于intent的ICC Collusion Attack，使用有限状态自动机方法从组件层面进行检测。  </p>
+<h2 id="1-针对问题："><a href="#1-针对问题：" class="headerlink" title="1.针对问题："></a>1.针对问题：</h2><p>Android 多个应用之间的互相调用和交互时存在ICC Collusion Attack</p>
+<p><strong>ICC Collusion Attack</strong>：两个应用之间的组件调用，但是两个应用所拥有的权限不同，因此应用A可以通过应用B可以获取不属于应用A的权限，导致权限提升问题。可以称之为组件间通信合谋攻击。</p>
+<p><strong>Treat Model</strong>：如下图(msgRead与msgSend应用之间存在提权攻击)所示，msgRead拥有接收短信和读取短信的权限，msgSend拥有写短信和发短信的权限，msgRead通过Intent与msgSend交互时，可能存在将短信内容通过intent发送给msgSend，导致隐私泄露。<br> <img src="/2018/08/23/Intersection Automata/Intersection/msg.jpg" alt="title"></p>
+<h2 id="2-contribution"><a href="#2-contribution" class="headerlink" title="2.contribution"></a>2.contribution</h2><p>（1）    第一个使用非确定性有限状态自动机来标识基于ICC的Intent,使用app之间的通讯和相关策略的制定来检测攻击<br>（2）    在组件层面分析（传统工作都基于应用或方法层面分析，不精确且应用范围小）<br>（3）    对21个app组合成的210对进行测试，成功检测<br>（4）    时间和内存都是线性的</p>
+<h2 id="3-Challenge"><a href="#3-Challenge" class="headerlink" title="3.Challenge"></a>3.Challenge</h2><p>（1）    App之间的ICC Collusion Attack检测比较难<br>（2）    ICC Collusion Attack与隐式intent相关联，如何将intent与隐私泄露结合，实际上需要考虑intent-component-permission这条链。<br>（3）    将app行为与定制的策略相结合</p>
+<h2 id="4-文章方法"><a href="#4-文章方法" class="headerlink" title="4.文章方法"></a>4.文章方法</h2><p>由于intent的发送者和接收者组件权限不相等，因此ICC Collusion Attack检测问题可以被视为字符串搜索和模式匹配问题。所以本文提出了组件层面的自动机检测方案。<br>该交叉自动机由两个自动机组成。提取两个app(A和B)中的调用图，如果A的组件发送一个Intent给应用B符合intent-filter的组件，则A和B之间使用边连接起来（application自动机）。检测这些边是否破坏了我们定义的安全权限策略（policy自动机）。<br>(1)application自动机<br>第一个是对app进行分析得到的Application自动机，描述函数和权限之间的关系，如图2(application自动机示意图)所示。<br>（1）首先提取app中的图，顶点代表所有的组件，定义intent的源组件和目标组件，边即连接源组件和目标组件。<br>（2）将两个app的顶点和边形成的图进行联合。<br>（3）减少与权限无关的边<br>（4）将图转换成自动机，该自动机大小为n（n是app中组件数量）。<br><img src="/2018/08/23/Intersection Automata/Intersection/application.jpg" alt="title"></p>
+<p>(2)policy自动机<br>第二个自动机描述权限和隐私泄露之间的关系，Collusion attack发生是因为危险权限以一定的顺序被使用，policy自动机如图3所示。<br><img src="/2018/08/23/Intersection Automata/Intersection/policy.jpg" alt="title"><br>最终的自动机结合了权限，函数调用和隐私泄露的policy，最终检测出ICC Collusion Attack，如图4(交叉自动机示意图)所示。<br><img src="/2018/08/23/Intersection Automata/Intersection/policy.jpg" alt="title"></p>
+<h2 id="5-evaluation"><a href="#5-evaluation" class="headerlink" title="5.evaluation"></a>5.evaluation</h2><p>数据来源：21个app（14app(自己设计)+ 3 app(DroidBench)+ 4app(Google Play)）<br>两两app进行组合，总210对app组<br>结果：21个app之间存在发送短信，泄露位置等隐私泄露现象。实验证明自动机状态数与分析的app组件数是线性关系。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://skylinelulu.github.io/2018/07/01/3D-CFG/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1582,137 +1732,13 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://skylinelulu.github.io/2018/05/12/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="SkylineLulu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="SkylineLulu">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/12/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-12T20:14:09+08:00">
-                2018-05-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -1756,7 +1782,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1778,7 +1804,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
