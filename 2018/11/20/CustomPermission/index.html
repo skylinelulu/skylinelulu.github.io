@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android,Custom Permission," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="《Resolving the predicament of Android custom permissions》来源：NDSS 2018 (CCF A)关键词：Android, Custom Permission 1.针对问题：自定义权限的不安全性2.Contribution（1） 提出Android现有的自定义权限存在的漏洞以及根据漏洞实施了两大攻击  恶意app可绕过用户交互需求直接获取危险">
+<meta name="keywords" content="Android,Custom Permission">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CustomPermission">
+<meta property="og:url" content="https://skylinelulu.github.io/2018/11/20/CustomPermission/index.html">
+<meta property="og:site_name" content="SkylineLulu">
+<meta property="og:description" content="《Resolving the predicament of Android custom permissions》来源：NDSS 2018 (CCF A)关键词：Android, Custom Permission 1.针对问题：自定义权限的不安全性2.Contribution（1） 提出Android现有的自定义权限存在的漏洞以及根据漏洞实施了两大攻击  恶意app可绕过用户交互需求直接获取危险">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://skylinelulu.github.io/2018/11/20/CustomPermission/CustomPerm.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2018/11/20/CustomPermission/Attack.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2018/11/20/CustomPermission/AttackProcess.png">
+<meta property="og:updated_time" content="2019-03-28T17:54:53.089Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CustomPermission">
+<meta name="twitter:description" content="《Resolving the predicament of Android custom permissions》来源：NDSS 2018 (CCF A)关键词：Android, Custom Permission 1.针对问题：自定义权限的不安全性2.Contribution（1） 提出Android现有的自定义权限存在的漏洞以及根据漏洞实施了两大攻击  恶意app可绕过用户交互需求直接获取危险">
+<meta name="twitter:image" content="https://skylinelulu.github.io/2018/11/20/CustomPermission/CustomPerm.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://skylinelulu.github.io/2018/11/20/CustomPermission/"/>
+
+
+
+
+
+  <title>CustomPermission | SkylineLulu</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SkylineLulu</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://skylinelulu.github.io/2018/11/20/CustomPermission/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="SkylineLulu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SkylineLulu">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CustomPermission</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-20T21:32:11+08:00">
+                2018-11-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Paper/" itemprop="url" rel="index">
+                    <span itemprop="name">Paper</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>《Resolving the predicament of Android custom permissions》<br>来源：NDSS 2018 (CCF A)<br>关键词：Android, Custom Permission</p>
+<h2 id="1-针对问题：自定义权限的不安全性"><a href="#1-针对问题：自定义权限的不安全性" class="headerlink" title="1.针对问题：自定义权限的不安全性"></a>1.针对问题：自定义权限的不安全性</h2><h2 id="2-Contribution"><a href="#2-Contribution" class="headerlink" title="2.Contribution"></a>2.Contribution</h2><p>（1） 提出Android现有的自定义权限存在的漏洞以及根据漏洞实施了两大攻击</p>
+<ul>
+<li>恶意app可绕过用户交互需求直接获取危险权限，窃取高危险级的系统资源（Android6.0及以上）</li>
+<li>恶意app可提升自己的权限以访问其他app受保护的组件<br>（2） 建立了第一套Android下运行时权限模型，提出了Cusper，解决上述存在的漏洞</li>
+</ul>
+<h2 id="3-Inroduction"><a href="#3-Inroduction" class="headerlink" title="3.Inroduction"></a>3.Inroduction</h2><p>Android权限模型：Normal，Signature，Dangerous<br>Android 6.0之前：安装时权限<br>Android 6.0之后：运行时权限（仅针对dangerous权限）<br>Android不允许两个同名权限同时存在于一个设备上。<br>系统权限：保护系统资源<br><strong>自定义权限</strong>：第三方应用程序可自己定义新的权限。 保护不同app之间或者系统组件间的IPC资源<br>然而！<br>（1）安卓对待自定义权限和系统权限没有区别<br>（2）没有对自定义权限的命名规则约束，可以随便取自定义权限名称</p>
+<p>自定义权限的使用情况如图所示：<br> <img src="/2018/11/20/CustomPermission/CustomPerm.png" alt="title"></p>
+<h2 id="4-Attack"><a href="#4-Attack" class="headerlink" title="4.Attack"></a>4.Attack</h2><p>利用自定义权限获取未授权的平台和app资源</p>
+<p>两种攻击：custom permission upgrade，confused deputy<br>攻击前准备：<br>抓取应用市场（例如Google Play Store）下载感兴趣的目标应用，并进行逆向，分析Android Manifest文件和源代码，以观察自定义权限用于保护应用程序组件的情况。<br>攻击者可以在应用市场上构建和分发一系列恶意应用，利用Android的自定义权限漏洞对被攻击应用和平台发起攻击。</p>
+<p>A legacy application (legacy app) is a software program that is outdated or obsolete. Although a legacy app still works, it may be unstable because of compatibility issues with current operating systems (OSes), browsers and information technology (IT) infrastructures.</p>
+<p><strong>1.custom permission upgrade attack</strong><br><strong>原理</strong>：系统权限和自定义权限没有隔离<br><strong>效果</strong>：攻击者可在未经过用户交互的情况下，直接获取dangerous级别的系统权限。<br><strong>概述</strong>：<br>（1）首先攻击者创建一个app，声明一个自定义权限，级别为normal或signature，并且将自定义权限设置为系统权限组的一部分（如存储，或照相机）<br>（2）更新此自定义权限的定义，将保护级别更改为dangerous，并继续在相应的应用市场上推送其应用的更新，此时攻击者app将自动获取授权，同时自动获取同组其他危险权限，而不会告知用户<br> <img src="/2018/11/20/CustomPermission/Attack.png" alt="title"><br>左边：已获取该system permission group的权限<br>右边：可获取该dangerous权限及该权限组的所有权限</p>
+<p><strong>分析</strong>：<br>（1）Android处理自定义权限的方式与系统权限相同<br>（2）normal和signature权限在安装时授予。对于传统应用程序（SDK&lt;23），dangerous权限也在安装时授予;而对于新应用程序，则在运行时被授予。</p>
+<p>当system权限从安装时授予变成运行时授予，意味着 这个app升级到了SDK 23以上<br>当custom 权限升级，暗示着 这个app有可能升级了，也有可能权限级别从normal/signature变成了dangerous<br>但是系统并不具备区分这两种情况的能力</p>
+<p>如果传统应用程序升级到SDK 23或更高，则系统还将授予的危险权限从安装时 “升级”到运行时权限，并在用户未通过权限设置手动撤销它们时自动授予它们（由FLAG_PERMISSION REVOKE_ON_UPGRADE标志被设置为允许）。<br>PackageManager.FLAG_PERMISSION_REVOKE_ON_UPGRADE：如果permission被标记了这个flag，那么表示，app升级后被deny的permission,会依然是deny的状态。这个flag会在下面的情况中用到。适用于L以前版本的app,安装得到M的device上，如果它的dangerous permission被撤销了，比如通过settings里面的permission管理撤销或者device policy中设定，那么该APP升级到适用于M新的permission模式后，那么升级后这个permission依然是撤销的状态。也就是dangerous permission如果在升级之前被撤销过，升级后依然是撤销的状态。</p>
+<p><strong>2.confused deputy attack</strong><br><strong>原理</strong>：利用自定义权限不严格的命名约定<br><strong>效果</strong>：使操作系统向攻击应用授予被攻击应用的签名级自定义权限（俩应用为不同证书签名），以此获取对被攻击应用组件的未经授权的访问。<br><strong>概述</strong>：<br>假定被攻击应用自定义权限名为N</p>
+<ol>
+<li>攻击者创建两个app，definer app A自定义一个名称为N的权限，但将保护级别设置为dangerous，attack app仅在清单中请求该权限N</li>
+<li>Definer app需要先由用户安装，然后安装attack app。在运行时将definer app的欺骗权限授予attack app后，definer app可由用户卸载或由应用程序开发人员更新，以便事后安装被攻击应用。</li>
+<li>安装被攻击app后，attack app能够向受害者发起攻击，以便自由访问被攻击app的受到签名保护的组件，即使它未使用与被攻击app相同的应用程序证书进行签名。<br><img src="/2018/11/20/CustomPermission/AttackProcess.png" alt="title"><br>Google承认这是高度严重的攻击，因为它绕过了隔离应用程序数据与其他应用程序的操作系统保护。</li>
+</ol>
+<p><strong>分析</strong>：<br>（1）在更新或卸载app时，系统并不立即更新原有的自定义权限，而是在重新声明具有相同名称的新权限时撤销。<br>（2）由于Android在权限执行期间仅使用权限名称，因此无法区分具有相同声明名称的两个不同权限。因此，持有“暂时休眠”危险权限的应用程序会以未授权的方式访问受同名signature权限保护的组件。</p>
+<p><strong>目标app</strong>：<br>（1）CareZone<br>所有的隐私数据都存在一个被signature级别的自定义权限保护的content provider中<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;permission android:label=<span class="string">"@string/permission_access_provider_label"</span> android:name=<span class="string">"com.carezone.caredroid.careapp.permission.CZ_CONTENT_PROVIDER"</span> android:protectionLevel=<span class="string">"signature|signatureOrSystem"</span> android:description=<span class="string">"@string/permission_access_provider_desc"</span> /&gt;</span><br><span class="line"></span><br><span class="line">&lt;provider android:name=<span class="string">"com.carezone.caredroid.careapp.content.provider.CareAppProvider"</span> android:permission=<span class="string">"com.carezone.caredroid.careapp.permission.CZ_CONTENT_PROVIDER"</span> android:exported=<span class="string">"true"</span> android:authorities=<span class="string">"@string/cz_authority_content"</span> android:syncable=<span class="string">"true"</span> /&gt;</span><br></pre></td></tr></table></figure></p>
+<p>（2）Skype<br>有一个被signature级别的权限保护的Activity，该Activity的功能是拨打电话</p>
+<h2 id="5-Cusper"><a href="#5-Cusper" class="headerlink" title="5.Cusper"></a>5.Cusper</h2><p>修改Android源码BasePermission等class文件</p>
+<p>A. 隔离系统权限和自定义权限</p>
+<ul>
+<li>sourcePackage（权限的始发包名）无法可靠的标记权限是系统还是自定义</li>
+<li>使用额外的成员变量来扩展权限的对象表示，以指示此权限是否为自定义权限</li>
+<li>应用程序声明自定义权限组时，禁止使用系统权限组前缀（android.permission-group）</li>
+<li>区分系统和自定义权限后，设置FLAG_PERMISSION_REVOKE_ON_UPGRADE标志位，攻击者将应用更新为dangerous权限时，系统不会自动授予</li>
+</ul>
+<p>B.系统级的自定义权限命名约束<br>设想解决：<br>1.将app包名作为源id，强制所有自定义权限名称都内部添加声明它的app的id为前缀：source_id:permission_name，以此解决不同app的同名权限欺骗攻击<br>2.系统只允许签名相同的app申请同名自定义权限</p>
+<p>但是存在两个问题：<br>1.恶意应用刻意伪造包名与被攻击者包名一致？<br>2.同一开发者开发的多个应用之间若要互相申请使用权限？<br>解决：使用app的signature作为source_id</p>
+<h2 id="6-Android-Permissions-Alloy-Model"><a href="#6-Android-Permissions-Alloy-Model" class="headerlink" title="6.Android Permissions Alloy Model"></a>6.Android Permissions Alloy Model</h2><p>Alloy：一种轻量级的formal语言</p>
+<p>（1）构建权限，applications，组件，设备的相关数据结构体<br>Permissions  {name, package, protection level, permission group}<br>Applications  {packageName, signature, declaredPerms, usesPerms, guard, components, targetSDK, permissionState}<br>Components  {app, guard}    //guard是指protected permission<br>Device  {apps, builtinPerms, customPerms, platform PackageName, platformSignature, builtinPermGroups}<br>（2）与权限相关的系统操作  {install, uninstall, update}<br>（3）实现效果：可以防止以上提出来的两种攻击</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/Custom-Permission/" rel="tag"># Custom Permission</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/02/QQEmojiBug/" rel="next" title="QQ表情-脏话bug漏洞">
+                <i class="fa fa-chevron-left"></i> QQ表情-脏话bug漏洞
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/25/PIAnalyzer/" rel="prev" title="PIAnalyzer">
+                PIAnalyzer <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">SkylineLulu</p>
+              <p class="site-description motion-element" itemprop="description">在头顶上，有几千亿的光年。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/skylinelulu" target="_blank" title="GitHub">
+                      GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:skylinelulu@163.com" target="_blank" title="E-Mail">
+                      E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/skylinelulu" title="Skylinelulu Github" target="_blank">Skylinelulu Github</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-针对问题：自定义权限的不安全性"><span class="nav-number">1.</span> <span class="nav-text">1.针对问题：自定义权限的不安全性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Contribution"><span class="nav-number">2.</span> <span class="nav-text">2.Contribution</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Inroduction"><span class="nav-number">3.</span> <span class="nav-text">3.Inroduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Attack"><span class="nav-number">4.</span> <span class="nav-text">4.Attack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Cusper"><span class="nav-number">5.</span> <span class="nav-text">5.Cusper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Android-Permissions-Alloy-Model"><span class="nav-number">6.</span> <span class="nav-text">6.Android Permissions Alloy Model</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SkylineLulu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

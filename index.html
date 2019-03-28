@@ -357,8 +357,185 @@
 <p>Listing 1.4是 Android源码中addAccount的代码，一旦有app添加账户就会调用这里的addAccount函数，mPendingIntent会返回给注册了相应action的app，而这个app就可以在Android Setting的context下重写空的base intent，从而执行恶意行为。<br> <img src="/2018/12/25/PIAnalyzer/AddAccountSettings.png" alt="title"></p>
 <p>恶意应用请求添加账户类型，Android Setting 一旦接收到这个intent，就会执行addAccount函数，返回vulnerable PendingIntent。Listing 1.6是恶意应用的一个Activity，由于恶意软件注册成为AccountAuthenticator，所以接收到这个PendingIntent。随后，在第3行，它创建了一个vunlnintent来执行恢复出厂设置的操作，在第5行用vunlnintent作为更新后的base intent来触发PendingIntent，手机恢复出厂设置。<br> <img src="/2018/12/25/PIAnalyzer/Malicious.png" alt="title"></p>
 <h2 id="4-检测方法——PIAnalyzer"><a href="#4-检测方法——PIAnalyzer" class="headerlink" title="4.检测方法——PIAnalyzer"></a>4.检测方法——PIAnalyzer</h2><p>从smali代码中，采用程序切片方法寻找相关的不安全代码<br>（1）提取PendingIntent<br>寻找包裹base intent的函数：getActivity，getActivities，getBroadcast，getService。<br>（2）分析base intent<br>使用后向切片来找到base intent，并确定其是隐式的还是显式的，这篇文章只关注隐式base intent。<br>注：有6个函数可以使隐式intent变成显式的，setClass(), setClassName(), setComponent(), setPackage() and setSelector()<br>（3）分析PendingIntent<br>使用前向切片来寻找PendingIntent的使用方式：发送到系统组件中还是被包裹成另外一个intent。由于系统组件不会执行攻击，因此主要关注wrappingIntent<br>（4）wrappingIntent分析<br>使用后向切片来分析这个wrappingIntent是否是隐式的<br>（5）生成调用图<br>intent的整个调用链<br>（6）报告：有三种安全级别<br>secure: pendingIntent + 显式base intent<br>warning: pendingIntent + 隐式base intent + 发送给系统组件<br>vulnerablity: pendingIntent + 隐式base intent + 隐式wrappingIntent</p>
-<h2 id="5-evaluation"><a href="#5-evaluation" class="headerlink" title="5.evaluation"></a>5.evaluation</h2><p>数据集：Google Play上任选1000个应用<br>发现：435个app在PendingIntent中包裹了至少一个隐式base intent，找到了1358个PendingIntent的不安全使用，包括70个严重的漏洞。平均一个app 13秒。80%的 vulnerabilities和98%的warnings发生在第三方库中。<br>这些app申请权限的情况：279危险权限和273个普通权限<br>检查精确性：手工检查70中的10个，9个可以精确检查出来</p>
+<h2 id="5-Evaluation"><a href="#5-Evaluation" class="headerlink" title="5.Evaluation"></a>5.Evaluation</h2><p>数据集：Google Play上任选1000个应用<br>发现：435个app在PendingIntent中包裹了至少一个隐式base intent，找到了1358个PendingIntent的不安全使用，包括70个严重的漏洞。平均一个app 13秒。80%的 vulnerabilities和98%的warnings发生在第三方库中。<br>这些app申请权限的情况：279危险权限和273个普通权限<br>检查精确性：手工检查70中的10个，9个可以精确检查出来</p>
 <h2 id="6-Limitation"><a href="#6-Limitation" class="headerlink" title="6.Limitation"></a>6.Limitation</h2><p>静态分析的固有缺陷：无法检测反射、naive层以及运行时决定Intent是显式还是隐式的</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://skylinelulu.github.io/2018/11/20/CustomPermission/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="SkylineLulu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SkylineLulu">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/20/CustomPermission/" itemprop="url">CustomPermission</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-20T21:32:11+08:00">
+                2018-11-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Paper/" itemprop="url" rel="index">
+                    <span itemprop="name">Paper</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>《Resolving the predicament of Android custom permissions》<br>来源：NDSS 2018 (CCF A)<br>关键词：Android, Custom Permission</p>
+<h2 id="1-针对问题：自定义权限的不安全性"><a href="#1-针对问题：自定义权限的不安全性" class="headerlink" title="1.针对问题：自定义权限的不安全性"></a>1.针对问题：自定义权限的不安全性</h2><h2 id="2-Contribution"><a href="#2-Contribution" class="headerlink" title="2.Contribution"></a>2.Contribution</h2><p>（1） 提出Android现有的自定义权限存在的漏洞以及根据漏洞实施了两大攻击</p>
+<ul>
+<li>恶意app可绕过用户交互需求直接获取危险权限，窃取高危险级的系统资源（Android6.0及以上）</li>
+<li>恶意app可提升自己的权限以访问其他app受保护的组件<br>（2） 建立了第一套Android下运行时权限模型，提出了Cusper，解决上述存在的漏洞</li>
+</ul>
+<h2 id="3-Inroduction"><a href="#3-Inroduction" class="headerlink" title="3.Inroduction"></a>3.Inroduction</h2><p>Android权限模型：Normal，Signature，Dangerous<br>Android 6.0之前：安装时权限<br>Android 6.0之后：运行时权限（仅针对dangerous权限）<br>Android不允许两个同名权限同时存在于一个设备上。<br>系统权限：保护系统资源<br><strong>自定义权限</strong>：第三方应用程序可自己定义新的权限。 保护不同app之间或者系统组件间的IPC资源<br>然而！<br>（1）安卓对待自定义权限和系统权限没有区别<br>（2）没有对自定义权限的命名规则约束，可以随便取自定义权限名称</p>
+<p>自定义权限的使用情况如图所示：<br> <img src="/2018/11/20/CustomPermission/CustomPerm.png" alt="title"></p>
+<h2 id="4-Attack"><a href="#4-Attack" class="headerlink" title="4.Attack"></a>4.Attack</h2><p>利用自定义权限获取未授权的平台和app资源</p>
+<p>两种攻击：custom permission upgrade，confused deputy<br>攻击前准备：<br>抓取应用市场（例如Google Play Store）下载感兴趣的目标应用，并进行逆向，分析Android Manifest文件和源代码，以观察自定义权限用于保护应用程序组件的情况。<br>攻击者可以在应用市场上构建和分发一系列恶意应用，利用Android的自定义权限漏洞对被攻击应用和平台发起攻击。</p>
+<p>A legacy application (legacy app) is a software program that is outdated or obsolete. Although a legacy app still works, it may be unstable because of compatibility issues with current operating systems (OSes), browsers and information technology (IT) infrastructures.</p>
+<p><strong>1.custom permission upgrade attack</strong><br><strong>原理</strong>：系统权限和自定义权限没有隔离<br><strong>效果</strong>：攻击者可在未经过用户交互的情况下，直接获取dangerous级别的系统权限。<br><strong>概述</strong>：<br>（1）首先攻击者创建一个app，声明一个自定义权限，级别为normal或signature，并且将自定义权限设置为系统权限组的一部分（如存储，或照相机）<br>（2）更新此自定义权限的定义，将保护级别更改为dangerous，并继续在相应的应用市场上推送其应用的更新，此时攻击者app将自动获取授权，同时自动获取同组其他危险权限，而不会告知用户<br> <img src="/2018/11/20/CustomPermission/Attack.png" alt="title"><br>左边：已获取该system permission group的权限<br>右边：可获取该dangerous权限及该权限组的所有权限</p>
+<p><strong>分析</strong>：<br>（1）Android处理自定义权限的方式与系统权限相同<br>（2）normal和signature权限在安装时授予。对于传统应用程序（SDK&lt;23），dangerous权限也在安装时授予;而对于新应用程序，则在运行时被授予。</p>
+<p>当system权限从安装时授予变成运行时授予，意味着 这个app升级到了SDK 23以上<br>当custom 权限升级，暗示着 这个app有可能升级了，也有可能权限级别从normal/signature变成了dangerous<br>但是系统并不具备区分这两种情况的能力</p>
+<p>如果传统应用程序升级到SDK 23或更高，则系统还将授予的危险权限从安装时 “升级”到运行时权限，并在用户未通过权限设置手动撤销它们时自动授予它们（由FLAG_PERMISSION REVOKE_ON_UPGRADE标志被设置为允许）。<br>PackageManager.FLAG_PERMISSION_REVOKE_ON_UPGRADE：如果permission被标记了这个flag，那么表示，app升级后被deny的permission,会依然是deny的状态。这个flag会在下面的情况中用到。适用于L以前版本的app,安装得到M的device上，如果它的dangerous permission被撤销了，比如通过settings里面的permission管理撤销或者device policy中设定，那么该APP升级到适用于M新的permission模式后，那么升级后这个permission依然是撤销的状态。也就是dangerous permission如果在升级之前被撤销过，升级后依然是撤销的状态。</p>
+<p><strong>2.confused deputy attack</strong><br><strong>原理</strong>：利用自定义权限不严格的命名约定<br><strong>效果</strong>：使操作系统向攻击应用授予被攻击应用的签名级自定义权限（俩应用为不同证书签名），以此获取对被攻击应用组件的未经授权的访问。<br><strong>概述</strong>：<br>假定被攻击应用自定义权限名为N</p>
+<ol>
+<li>攻击者创建两个app，definer app A自定义一个名称为N的权限，但将保护级别设置为dangerous，attack app仅在清单中请求该权限N</li>
+<li>Definer app需要先由用户安装，然后安装attack app。在运行时将definer app的欺骗权限授予attack app后，definer app可由用户卸载或由应用程序开发人员更新，以便事后安装被攻击应用。</li>
+<li>安装被攻击app后，attack app能够向受害者发起攻击，以便自由访问被攻击app的受到签名保护的组件，即使它未使用与被攻击app相同的应用程序证书进行签名。<br><img src="/2018/11/20/CustomPermission/AttackProcess.png" alt="title"><br>Google承认这是高度严重的攻击，因为它绕过了隔离应用程序数据与其他应用程序的操作系统保护。</li>
+</ol>
+<p><strong>分析</strong>：<br>（1）在更新或卸载app时，系统并不立即更新原有的自定义权限，而是在重新声明具有相同名称的新权限时撤销。<br>（2）由于Android在权限执行期间仅使用权限名称，因此无法区分具有相同声明名称的两个不同权限。因此，持有“暂时休眠”危险权限的应用程序会以未授权的方式访问受同名signature权限保护的组件。</p>
+<p><strong>目标app</strong>：<br>（1）CareZone<br>所有的隐私数据都存在一个被signature级别的自定义权限保护的content provider中<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;permission android:label=<span class="string">"@string/permission_access_provider_label"</span> android:name=<span class="string">"com.carezone.caredroid.careapp.permission.CZ_CONTENT_PROVIDER"</span> android:protectionLevel=<span class="string">"signature|signatureOrSystem"</span> android:description=<span class="string">"@string/permission_access_provider_desc"</span> /&gt;</span><br><span class="line"></span><br><span class="line">&lt;provider android:name=<span class="string">"com.carezone.caredroid.careapp.content.provider.CareAppProvider"</span> android:permission=<span class="string">"com.carezone.caredroid.careapp.permission.CZ_CONTENT_PROVIDER"</span> android:exported=<span class="string">"true"</span> android:authorities=<span class="string">"@string/cz_authority_content"</span> android:syncable=<span class="string">"true"</span> /&gt;</span><br></pre></td></tr></table></figure></p>
+<p>（2）Skype<br>有一个被signature级别的权限保护的Activity，该Activity的功能是拨打电话</p>
+<h2 id="5-Cusper"><a href="#5-Cusper" class="headerlink" title="5.Cusper"></a>5.Cusper</h2><p>修改Android源码BasePermission等class文件</p>
+<p>A. 隔离系统权限和自定义权限</p>
+<ul>
+<li>sourcePackage（权限的始发包名）无法可靠的标记权限是系统还是自定义</li>
+<li>使用额外的成员变量来扩展权限的对象表示，以指示此权限是否为自定义权限</li>
+<li>应用程序声明自定义权限组时，禁止使用系统权限组前缀（android.permission-group）</li>
+<li>区分系统和自定义权限后，设置FLAG_PERMISSION_REVOKE_ON_UPGRADE标志位，攻击者将应用更新为dangerous权限时，系统不会自动授予</li>
+</ul>
+<p>B.系统级的自定义权限命名约束<br>设想解决：<br>1.将app包名作为源id，强制所有自定义权限名称都内部添加声明它的app的id为前缀：source_id:permission_name，以此解决不同app的同名权限欺骗攻击<br>2.系统只允许签名相同的app申请同名自定义权限</p>
+<p>但是存在两个问题：<br>1.恶意应用刻意伪造包名与被攻击者包名一致？<br>2.同一开发者开发的多个应用之间若要互相申请使用权限？<br>解决：使用app的signature作为source_id</p>
+<h2 id="6-Android-Permissions-Alloy-Model"><a href="#6-Android-Permissions-Alloy-Model" class="headerlink" title="6.Android Permissions Alloy Model"></a>6.Android Permissions Alloy Model</h2><p>Alloy：一种轻量级的formal语言</p>
+<p>（1）构建权限，applications，组件，设备的相关数据结构体<br>Permissions  {name, package, protection level, permission group}<br>Applications  {packageName, signature, declaredPerms, usesPerms, guard, components, targetSDK, permissionState}<br>Components  {app, guard}    //guard是指protected permission<br>Device  {apps, builtinPerms, customPerms, platform PackageName, platformSignature, builtinPermGroups}<br>（2）与权限相关的系统操作  {install, uninstall, update}<br>（3）实现效果：可以防止以上提出来的两种攻击</p>
 
           
         
@@ -1601,148 +1778,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://skylinelulu.github.io/2018/05/31/Android Permissions Unleashed/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="SkylineLulu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="SkylineLulu">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/31/Android Permissions Unleashed/" itemprop="url">Android Permission Unleashed</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-31T18:02:17+08:00">
-                2018-05-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Paper/" itemprop="url" rel="index">
-                    <span itemprop="name">Paper</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>《Android permissions unleashed》<br>来源：CSF 2015<br>关键词：定理证明器，Android权限模型，策略<br>摘要：<br>  本文利用定力证明器为Android权限建模，将组件的权限定制成策略集合，提出了两个概念：一个是组件栈（Component stack），由frame组成,而frame F = { C, P, Φ }，其中， C为component，P为权限集，Φ为策略集。第二个是系统配置，由组件栈组成，Σ = [S1; S2; . . .]；针对frame，stack和configuration制了相应的策略范围direct,local和global；将example中的权限与上述结合，构建了权限、组件和策略的逻辑表达。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1793,7 +1828,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1815,7 +1850,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

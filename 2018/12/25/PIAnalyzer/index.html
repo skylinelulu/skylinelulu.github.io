@@ -92,7 +92,7 @@
 <meta property="og:image" content="https://skylinelulu.github.io/2018/12/25/PIAnalyzer/AppB.png">
 <meta property="og:image" content="https://skylinelulu.github.io/2018/12/25/PIAnalyzer/AddAccountSettings.png">
 <meta property="og:image" content="https://skylinelulu.github.io/2018/12/25/PIAnalyzer/Malicious.png">
-<meta property="og:updated_time" content="2019-03-28T17:29:36.091Z">
+<meta property="og:updated_time" content="2019-03-28T17:52:03.574Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PIAnalyzer">
 <meta name="twitter:description" content="《PIAnalyzer: A Precise Approach for PendingIntent Vulnerability Analysis》来源：ESORICS 2018 (CCF B)关键词：Android, PendingIntent, Information flow control, Static analysis摘要：  本文总结归纳了不安全的PendingIntent的相关攻击，">
@@ -360,7 +360,7 @@
 <p>Listing 1.4是 Android源码中addAccount的代码，一旦有app添加账户就会调用这里的addAccount函数，mPendingIntent会返回给注册了相应action的app，而这个app就可以在Android Setting的context下重写空的base intent，从而执行恶意行为。<br> <img src="/2018/12/25/PIAnalyzer/AddAccountSettings.png" alt="title"></p>
 <p>恶意应用请求添加账户类型，Android Setting 一旦接收到这个intent，就会执行addAccount函数，返回vulnerable PendingIntent。Listing 1.6是恶意应用的一个Activity，由于恶意软件注册成为AccountAuthenticator，所以接收到这个PendingIntent。随后，在第3行，它创建了一个vunlnintent来执行恢复出厂设置的操作，在第5行用vunlnintent作为更新后的base intent来触发PendingIntent，手机恢复出厂设置。<br> <img src="/2018/12/25/PIAnalyzer/Malicious.png" alt="title"></p>
 <h2 id="4-检测方法——PIAnalyzer"><a href="#4-检测方法——PIAnalyzer" class="headerlink" title="4.检测方法——PIAnalyzer"></a>4.检测方法——PIAnalyzer</h2><p>从smali代码中，采用程序切片方法寻找相关的不安全代码<br>（1）提取PendingIntent<br>寻找包裹base intent的函数：getActivity，getActivities，getBroadcast，getService。<br>（2）分析base intent<br>使用后向切片来找到base intent，并确定其是隐式的还是显式的，这篇文章只关注隐式base intent。<br>注：有6个函数可以使隐式intent变成显式的，setClass(), setClassName(), setComponent(), setPackage() and setSelector()<br>（3）分析PendingIntent<br>使用前向切片来寻找PendingIntent的使用方式：发送到系统组件中还是被包裹成另外一个intent。由于系统组件不会执行攻击，因此主要关注wrappingIntent<br>（4）wrappingIntent分析<br>使用后向切片来分析这个wrappingIntent是否是隐式的<br>（5）生成调用图<br>intent的整个调用链<br>（6）报告：有三种安全级别<br>secure: pendingIntent + 显式base intent<br>warning: pendingIntent + 隐式base intent + 发送给系统组件<br>vulnerablity: pendingIntent + 隐式base intent + 隐式wrappingIntent</p>
-<h2 id="5-evaluation"><a href="#5-evaluation" class="headerlink" title="5.evaluation"></a>5.evaluation</h2><p>数据集：Google Play上任选1000个应用<br>发现：435个app在PendingIntent中包裹了至少一个隐式base intent，找到了1358个PendingIntent的不安全使用，包括70个严重的漏洞。平均一个app 13秒。80%的 vulnerabilities和98%的warnings发生在第三方库中。<br>这些app申请权限的情况：279危险权限和273个普通权限<br>检查精确性：手工检查70中的10个，9个可以精确检查出来</p>
+<h2 id="5-Evaluation"><a href="#5-Evaluation" class="headerlink" title="5.Evaluation"></a>5.Evaluation</h2><p>数据集：Google Play上任选1000个应用<br>发现：435个app在PendingIntent中包裹了至少一个隐式base intent，找到了1358个PendingIntent的不安全使用，包括70个严重的漏洞。平均一个app 13秒。80%的 vulnerabilities和98%的warnings发生在第三方库中。<br>这些app申请权限的情况：279危险权限和273个普通权限<br>检查精确性：手工检查70中的10个，9个可以精确检查出来</p>
 <h2 id="6-Limitation"><a href="#6-Limitation" class="headerlink" title="6.Limitation"></a>6.Limitation</h2><p>静态分析的固有缺陷：无法检测反射、naive层以及运行时决定Intent是显式还是隐式的</p>
 
       
@@ -396,8 +396,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/02/QQEmojiBug/" rel="next" title="QQ表情-脏话bug漏洞">
-                <i class="fa fa-chevron-left"></i> QQ表情-脏话bug漏洞
+              <a href="/2018/11/20/CustomPermission/" rel="next" title="CustomPermission">
+                <i class="fa fa-chevron-left"></i> CustomPermission
               </a>
             
           </div>
@@ -481,7 +481,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -503,7 +503,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -564,7 +564,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-针对问题："><span class="nav-number">1.</span> <span class="nav-text">1.针对问题：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Contribution"><span class="nav-number">2.</span> <span class="nav-text">2.Contribution</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Motivation"><span class="nav-number">3.</span> <span class="nav-text">3.Motivation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-检测方法——PIAnalyzer"><span class="nav-number">4.</span> <span class="nav-text">4.检测方法——PIAnalyzer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-evaluation"><span class="nav-number">5.</span> <span class="nav-text">5.evaluation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Limitation"><span class="nav-number">6.</span> <span class="nav-text">6.Limitation</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-针对问题："><span class="nav-number">1.</span> <span class="nav-text">1.针对问题：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Contribution"><span class="nav-number">2.</span> <span class="nav-text">2.Contribution</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Motivation"><span class="nav-number">3.</span> <span class="nav-text">3.Motivation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-检测方法——PIAnalyzer"><span class="nav-number">4.</span> <span class="nav-text">4.检测方法——PIAnalyzer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Evaluation"><span class="nav-number">5.</span> <span class="nav-text">5.Evaluation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Limitation"><span class="nav-number">6.</span> <span class="nav-text">6.Limitation</span></a></li></ol></div>
             
 
           </div>
