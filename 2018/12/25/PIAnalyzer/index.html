@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Windows IAT,hook," />
+  <meta name="keywords" content="Android,Static Analysis,PendingIntent," />
 
 
 
@@ -79,18 +79,24 @@
 
 
 
-<meta name="description" content="这个之后详细再写出来">
-<meta name="keywords" content="Windows IAT,hook">
+<meta name="description" content="《PIAnalyzer: A Precise Approach for PendingIntent Vulnerability Analysis》来源：ESORICS 2018 (CCF B)关键词：Android, PendingIntent, Information flow control, Static analysis摘要：  本文总结归纳了不安全的PendingIntent的相关攻击，">
+<meta name="keywords" content="Android,Static Analysis,PendingIntent">
 <meta property="og:type" content="article">
-<meta property="og:title" content="64位Windows中IAT表的获取">
-<meta property="og:url" content="https://skylinelulu.github.io/2018/06/09/64位Windows中IAT表的获取/index.html">
+<meta property="og:title" content="PIAnalyzer">
+<meta property="og:url" content="https://skylinelulu.github.io/2018/12/25/PIAnalyzer/index.html">
 <meta property="og:site_name" content="SkylineLulu">
-<meta property="og:description" content="这个之后详细再写出来">
+<meta property="og:description" content="《PIAnalyzer: A Precise Approach for PendingIntent Vulnerability Analysis》来源：ESORICS 2018 (CCF B)关键词：Android, PendingIntent, Information flow control, Static analysis摘要：  本文总结归纳了不安全的PendingIntent的相关攻击，">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-01T08:14:37.638Z">
+<meta property="og:image" content="https://skylinelulu.github.io/2018/12/25/PIAnalyzer/PendingIntentCode.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2018/12/25/PIAnalyzer/AppA.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2018/12/25/PIAnalyzer/AppB.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2018/12/25/PIAnalyzer/AddAccountSettings.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2018/12/25/PIAnalyzer/Malicious.png">
+<meta property="og:updated_time" content="2019-03-28T17:29:36.091Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="64位Windows中IAT表的获取">
-<meta name="twitter:description" content="这个之后详细再写出来">
+<meta name="twitter:title" content="PIAnalyzer">
+<meta name="twitter:description" content="《PIAnalyzer: A Precise Approach for PendingIntent Vulnerability Analysis》来源：ESORICS 2018 (CCF B)关键词：Android, PendingIntent, Information flow control, Static analysis摘要：  本文总结归纳了不安全的PendingIntent的相关攻击，">
+<meta name="twitter:image" content="https://skylinelulu.github.io/2018/12/25/PIAnalyzer/PendingIntentCode.png">
 
 
 
@@ -120,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="https://skylinelulu.github.io/2018/06/09/64位Windows中IAT表的获取/"/>
+  <link rel="canonical" href="https://skylinelulu.github.io/2018/12/25/PIAnalyzer/"/>
 
 
 
 
 
-  <title>64位Windows中IAT表的获取 | SkylineLulu</title>
+  <title>PIAnalyzer | SkylineLulu</title>
   
 
 
@@ -253,7 +259,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://skylinelulu.github.io/2018/06/09/64位Windows中IAT表的获取/">
+    <link itemprop="mainEntityOfPage" href="https://skylinelulu.github.io/2018/12/25/PIAnalyzer/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="SkylineLulu">
@@ -270,7 +276,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">64位Windows中IAT表的获取</h1>
+          <h1 class="post-title" itemprop="name headline">PIAnalyzer</h1>
         
 
         <div class="post-meta">
@@ -282,8 +288,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-09T15:23:47+08:00">
-                2018-06-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-25T20:06:51+08:00">
+                2018-12-25
               </time>
             
 
@@ -305,8 +311,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Windows/" itemprop="url" rel="index">
-                    <span itemprop="name">Windows</span>
+                  <a href="/categories/Paper/" itemprop="url" rel="index">
+                    <span itemprop="name">Paper</span>
                   </a>
                 </span>
 
@@ -342,7 +348,20 @@
       
 
       
-        <p>这个之后详细再写出来</p>
+        <p>《PIAnalyzer: A Precise Approach for PendingIntent Vulnerability Analysis》<br>来源：ESORICS 2018 (CCF B)<br>关键词：Android, PendingIntent, Information flow control, Static analysis<br>摘要：<br>  本文总结归纳了不安全的PendingIntent的相关攻击，并对其进行静态检测。  </p>
+<h2 id="1-针对问题："><a href="#1-针对问题：" class="headerlink" title="1.针对问题："></a>1.针对问题：</h2><p>不安全的PendingIntent使用会导致拒绝服务、identity窃取和提权（获取系统权限以删除设备上的用户数据）等攻击，文章是第一个静态检测不安全的PendingIntent的。</p>
+<p><strong>PendingIntent</strong>：PendingIntent是Android组件间通信的一个特征。PendingIntent主要用来在某个事件完成后执行特定的Action。它持有一个base intent(已定义action)，由另一个应用程序执行，而却拥有原app的权限和identity。此时原app进程不一定在运行，但是PendingIntent运行起来就好像是原app在运行一样。<br> <img src="/2018/12/25/PIAnalyzer/PendingIntentCode.png" alt="title"></p>
+<p><strong>PendingIntent与Intent之间的区别</strong>：PendingIntent就是一个可以在特定事件触发后执行的Intent，运行在新的task中，它相比于Intent的优势在于自己携带有Context对象，这样它就不必依赖于某个activity和原进程才可以存在。</p>
+<p><strong>PendingIntent应用场景</strong>：PendingIntent一般用于设置闹铃或者通知栏提醒。比如，一个应用想要在未来的某个时间点得到系统的通知，它就将自己创建的一个PendingIntent发送给Notification Manager，之后Notification Manager会触发该PendingIntent，使得一个预先定义好的组件可以得到通知和执行。</p>
+<p><strong>安全问题</strong>：隐式Intent可以被接受端app更改到任意组件上，并且拥有原app的权限，则会导致在原app的context中任意代码执行。</p>
+<h2 id="2-Contribution"><a href="#2-Contribution" class="headerlink" title="2.Contribution"></a>2.Contribution</h2><p>（1） PendingIntent分析（PIAnalyzer工具）：基于程序切片检测PendingIntent相关不安全代码<br>（2） PIAnalyzer评估及其有效性：发现了至少435个app在PendingIntent中包裹了至少一个隐式base intent，找到了1358个PendingIntent的不安全使用，包括70个严重的漏洞。平均一个app 13秒</p>
+<h2 id="3-Motivation"><a href="#3-Motivation" class="headerlink" title="3.Motivation"></a>3.Motivation</h2><p><strong>前提</strong>：原app有打电话的权限，而恶意app没有。<br>Listing 1.3中，任意一个定义了相应Intent filter的app都可以接受Listing 1.2中的implicitWrappingIntent，提取出PendingIntent并控制base intent，使其向收费短信发送短信。<br> <img src="/2018/12/25/PIAnalyzer/AppA.png" alt="title"><br> <img src="/2018/12/25/PIAnalyzer/AppB.png" alt="title"></p>
+<p>（1） 钓鱼攻击：如果PendingIntent包裹的base intent是隐式的，那么定义了相应intent filter的多个app都可以接收，这就需要用户选择一个app来接收。这种场景就可能被钓鱼app利用。<br>（2） 拒绝服务攻击：一般地，PendingIntent并不会被wrapping intent包裹起来，而是直接传递到系统组件中，这些组件会调用PendingIntent的send方法来触发base intent。恶意app可以注册一个组件来接收这个base intent执行拒绝服务攻击（这些Intent就不会被传递到目标组件中）<br>（3） 提权攻击：（Android 4所有版本都存在这个攻击,原因是在PendingIntent中使用了隐式base intent）</p>
+<p>Listing 1.4是 Android源码中addAccount的代码，一旦有app添加账户就会调用这里的addAccount函数，mPendingIntent会返回给注册了相应action的app，而这个app就可以在Android Setting的context下重写空的base intent，从而执行恶意行为。<br> <img src="/2018/12/25/PIAnalyzer/AddAccountSettings.png" alt="title"></p>
+<p>恶意应用请求添加账户类型，Android Setting 一旦接收到这个intent，就会执行addAccount函数，返回vulnerable PendingIntent。Listing 1.6是恶意应用的一个Activity，由于恶意软件注册成为AccountAuthenticator，所以接收到这个PendingIntent。随后，在第3行，它创建了一个vunlnintent来执行恢复出厂设置的操作，在第5行用vunlnintent作为更新后的base intent来触发PendingIntent，手机恢复出厂设置。<br> <img src="/2018/12/25/PIAnalyzer/Malicious.png" alt="title"></p>
+<h2 id="4-检测方法——PIAnalyzer"><a href="#4-检测方法——PIAnalyzer" class="headerlink" title="4.检测方法——PIAnalyzer"></a>4.检测方法——PIAnalyzer</h2><p>从smali代码中，采用程序切片方法寻找相关的不安全代码<br>（1）提取PendingIntent<br>寻找包裹base intent的函数：getActivity，getActivities，getBroadcast，getService。<br>（2）分析base intent<br>使用后向切片来找到base intent，并确定其是隐式的还是显式的，这篇文章只关注隐式base intent。<br>注：有6个函数可以使隐式intent变成显式的，setClass(), setClassName(), setComponent(), setPackage() and setSelector()<br>（3）分析PendingIntent<br>使用前向切片来寻找PendingIntent的使用方式：发送到系统组件中还是被包裹成另外一个intent。由于系统组件不会执行攻击，因此主要关注wrappingIntent<br>（4）wrappingIntent分析<br>使用后向切片来分析这个wrappingIntent是否是隐式的<br>（5）生成调用图<br>intent的整个调用链<br>（6）报告：有三种安全级别<br>secure: pendingIntent + 显式base intent<br>warning: pendingIntent + 隐式base intent + 发送给系统组件<br>vulnerablity: pendingIntent + 隐式base intent + 隐式wrappingIntent</p>
+<h2 id="5-evaluation"><a href="#5-evaluation" class="headerlink" title="5.evaluation"></a>5.evaluation</h2><p>数据集：Google Play上任选1000个应用<br>发现：435个app在PendingIntent中包裹了至少一个隐式base intent，找到了1358个PendingIntent的不安全使用，包括70个严重的漏洞。平均一个app 13秒。80%的 vulnerabilities和98%的warnings发生在第三方库中。<br>这些app申请权限的情况：279危险权限和273个普通权限<br>检查精确性：手工检查70中的10个，9个可以精确检查出来</p>
+<h2 id="6-Limitation"><a href="#6-Limitation" class="headerlink" title="6.Limitation"></a>6.Limitation</h2><p>静态分析的固有缺陷：无法检测反射、naive层以及运行时决定Intent是显式还是隐式的</p>
 
       
     </div>
@@ -360,9 +379,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Windows-IAT/" rel="tag"># Windows IAT</a>
+            <a href="/tags/Android/" rel="tag"># Android</a>
           
-            <a href="/tags/hook/" rel="tag"># hook</a>
+            <a href="/tags/Static-Analysis/" rel="tag"># Static Analysis</a>
+          
+            <a href="/tags/PendingIntent/" rel="tag"># PendingIntent</a>
           
         </div>
       
@@ -375,8 +396,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/03/ADBI框架在Android6.0平台上的使用/" rel="next" title="ADBI框架在Android6.0平台上的使用">
-                <i class="fa fa-chevron-left"></i> ADBI框架在Android6.0平台上的使用
+              <a href="/2018/09/02/QQEmojiBug/" rel="next" title="QQ表情-脏话bug漏洞">
+                <i class="fa fa-chevron-left"></i> QQ表情-脏话bug漏洞
               </a>
             
           </div>
@@ -384,10 +405,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/06/24/Z3SMT/" rel="prev" title="Z3求解器在Windows下的安装">
-                Z3求解器在Windows下的安装 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -439,8 +456,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -528,6 +554,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-针对问题："><span class="nav-number">1.</span> <span class="nav-text">1.针对问题：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Contribution"><span class="nav-number">2.</span> <span class="nav-text">2.Contribution</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Motivation"><span class="nav-number">3.</span> <span class="nav-text">3.Motivation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-检测方法——PIAnalyzer"><span class="nav-number">4.</span> <span class="nav-text">4.检测方法——PIAnalyzer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-evaluation"><span class="nav-number">5.</span> <span class="nav-text">5.evaluation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Limitation"><span class="nav-number">6.</span> <span class="nav-text">6.Limitation</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
