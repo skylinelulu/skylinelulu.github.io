@@ -345,7 +345,7 @@
       
         
           
-            <p>《An Empirical Study of Web Resource Manipulation in Real-world Mobile Applications》<br>来源：USENIX 2018 (CCF A)<br>关键词：Android, Web Resource Manipulation, malicious intent</p>
+            <p>《An Empirical Study of Web Resource Manipulation in Real-world Mobile Applications》<br>来源：USENIX 2018 (CCF A)<br>关键词：Android, Static Analysis, Web Resource Manipulation, Malicious intent<br>摘要：由于Android和IOS都允许应用程序注入JavaScript到WEB页面中，且web资源缺少同源访问控制，因此会导致XPM攻击(cross-principal manipulation)。此文章针对XPM攻击进行了研究，一方面定义并在现实app中研究了该威胁，另一方面设计了XPM的自动检测方案，其中在检测中引入了搜索引擎和自然语言处理部分。但此文章的重点不在于检测，而在于大规模的研究，最终提出了14个Finding。</p>
 <h2 id="1-针对问题："><a href="#1-针对问题：" class="headerlink" title="1.针对问题："></a>1.针对问题：</h2><p>静态检测Android与IOS中的WebView存在的attack——XPM (cross-principal manipulation)<br><strong>研究点</strong>：现实中的app到底有多少存在这个attack </p>
 <p><strong>XPM (cross-principal manipulation)</strong>：Android和iOS都有evaluateJavascript的API，允许host app注入JavaScript代码到Web页面中并得到结果。但是，这些web资源控制缺少同源访问控制，因此导致WebView的app的代码。例如，如果一个Host app通过webview加载“<a href="http://www.facebook.com”，那么它就可以使用evaluateJavascript" target="_blank" rel="noopener">www.facebook.com”，那么它就可以使用evaluateJavascript</a> API来在facebook页面中运行Javascript，从而得到facebook的数据。</p>
 <p>XPM如图所示，manipulating code（控制代码）通过Web Resource manipulate point（web资源控制点，即相关API）来控制Manipulated Web Resource。<br> <img src="/2019/10/28/WebResourceManipulation/XPM.png" alt="title"></p>
