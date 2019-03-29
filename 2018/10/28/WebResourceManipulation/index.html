@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Android,Static Analysis,PendingIntent," />
+  <meta name="keywords" content="Android,XPM," />
 
 
 
@@ -79,24 +79,24 @@
 
 
 
-<meta name="description" content="《PIAnalyzer: A Precise Approach for PendingIntent Vulnerability Analysis》来源：ESORICS 2018 (CCF B)关键词：Android, PendingIntent, Information flow control, Static analysis摘要：  本文总结归纳了不安全的PendingIntent的相关攻击，">
-<meta name="keywords" content="Android,Static Analysis,PendingIntent">
+<meta name="description" content="《An Empirical Study of Web Resource Manipulation in Real-world Mobile Applications》来源：USENIX 2018 (CCF A)关键词：Android, Static Analysis, Web Resource Manipulation, Malicious intent摘要：由于Android和IOS都允许应用程">
+<meta name="keywords" content="Android,XPM">
 <meta property="og:type" content="article">
-<meta property="og:title" content="PIAnalyzer">
-<meta property="og:url" content="https://skylinelulu.github.io/2018/01/12/PIAnalyzer/index.html">
+<meta property="og:title" content="WebResourceManipulation">
+<meta property="og:url" content="https://skylinelulu.github.io/2018/10/28/WebResourceManipulation/index.html">
 <meta property="og:site_name" content="SkylineLulu">
-<meta property="og:description" content="《PIAnalyzer: A Precise Approach for PendingIntent Vulnerability Analysis》来源：ESORICS 2018 (CCF B)关键词：Android, PendingIntent, Information flow control, Static analysis摘要：  本文总结归纳了不安全的PendingIntent的相关攻击，">
+<meta property="og:description" content="《An Empirical Study of Web Resource Manipulation in Real-world Mobile Applications》来源：USENIX 2018 (CCF A)关键词：Android, Static Analysis, Web Resource Manipulation, Malicious intent摘要：由于Android和IOS都允许应用程">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://skylinelulu.github.io/2018/01/12/PIAnalyzer/PendingIntentCode.png">
-<meta property="og:image" content="https://skylinelulu.github.io/2018/01/12/PIAnalyzer/AppA.png">
-<meta property="og:image" content="https://skylinelulu.github.io/2018/01/12/PIAnalyzer/AppB.png">
-<meta property="og:image" content="https://skylinelulu.github.io/2018/01/12/PIAnalyzer/AddAccountSettings.png">
-<meta property="og:image" content="https://skylinelulu.github.io/2018/01/12/PIAnalyzer/Malicious.png">
-<meta property="og:updated_time" content="2019-03-29T07:05:07.079Z">
+<meta property="og:image" content="https://skylinelulu.github.io/2018/10/28/WebResourceManipulation/XPM.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2018/10/28/WebResourceManipulation/Attacker.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2018/10/28/WebResourceManipulation/API.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2018/10/28/WebResourceManipulation/Similarity.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2018/10/28/WebResourceManipulation/Result.png">
+<meta property="og:updated_time" content="2019-03-29T07:24:31.599Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="PIAnalyzer">
-<meta name="twitter:description" content="《PIAnalyzer: A Precise Approach for PendingIntent Vulnerability Analysis》来源：ESORICS 2018 (CCF B)关键词：Android, PendingIntent, Information flow control, Static analysis摘要：  本文总结归纳了不安全的PendingIntent的相关攻击，">
-<meta name="twitter:image" content="https://skylinelulu.github.io/2018/01/12/PIAnalyzer/PendingIntentCode.png">
+<meta name="twitter:title" content="WebResourceManipulation">
+<meta name="twitter:description" content="《An Empirical Study of Web Resource Manipulation in Real-world Mobile Applications》来源：USENIX 2018 (CCF A)关键词：Android, Static Analysis, Web Resource Manipulation, Malicious intent摘要：由于Android和IOS都允许应用程">
+<meta name="twitter:image" content="https://skylinelulu.github.io/2018/10/28/WebResourceManipulation/XPM.png">
 
 
 
@@ -126,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="https://skylinelulu.github.io/2018/01/12/PIAnalyzer/"/>
+  <link rel="canonical" href="https://skylinelulu.github.io/2018/10/28/WebResourceManipulation/"/>
 
 
 
 
 
-  <title>PIAnalyzer | SkylineLulu</title>
+  <title>WebResourceManipulation | SkylineLulu</title>
   
 
 
@@ -259,7 +259,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://skylinelulu.github.io/2018/01/12/PIAnalyzer/">
+    <link itemprop="mainEntityOfPage" href="https://skylinelulu.github.io/2018/10/28/WebResourceManipulation/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="SkylineLulu">
@@ -276,7 +276,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">PIAnalyzer</h1>
+          <h1 class="post-title" itemprop="name headline">WebResourceManipulation</h1>
         
 
         <div class="post-meta">
@@ -288,8 +288,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-12T20:06:51+08:00">
-                2018-01-12
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-28T20:50:18+08:00">
+                2018-10-28
               </time>
             
 
@@ -348,20 +348,20 @@
       
 
       
-        <p>《PIAnalyzer: A Precise Approach for PendingIntent Vulnerability Analysis》<br>来源：ESORICS 2018 (CCF B)<br>关键词：Android, PendingIntent, Information flow control, Static analysis<br>摘要：<br>  本文总结归纳了不安全的PendingIntent的相关攻击，并对其进行静态检测。  </p>
-<h2 id="1-针对问题："><a href="#1-针对问题：" class="headerlink" title="1.针对问题："></a>1.针对问题：</h2><p>不安全的PendingIntent使用会导致拒绝服务、identity窃取和提权（获取系统权限以删除设备上的用户数据）等攻击，文章是第一个静态检测不安全的PendingIntent的。</p>
-<p><strong>PendingIntent</strong>：PendingIntent是Android组件间通信的一个特征。PendingIntent主要用来在某个事件完成后执行特定的Action。它持有一个base intent(已定义action)，由另一个应用程序执行，而却拥有原app的权限和identity。此时原app进程不一定在运行，但是PendingIntent运行起来就好像是原app在运行一样。<br> <img src="/2018/01/12/PIAnalyzer/PendingIntentCode.png" alt="title"></p>
-<p><strong>PendingIntent与Intent之间的区别</strong>：PendingIntent就是一个可以在特定事件触发后执行的Intent，运行在新的task中，它相比于Intent的优势在于自己携带有Context对象，这样它就不必依赖于某个activity和原进程才可以存在。</p>
-<p><strong>PendingIntent应用场景</strong>：PendingIntent一般用于设置闹铃或者通知栏提醒。比如，一个应用想要在未来的某个时间点得到系统的通知，它就将自己创建的一个PendingIntent发送给Notification Manager，之后Notification Manager会触发该PendingIntent，使得一个预先定义好的组件可以得到通知和执行。</p>
-<p><strong>安全问题</strong>：隐式Intent可以被接受端app更改到任意组件上，并且拥有原app的权限，则会导致在原app的context中任意代码执行。</p>
-<h2 id="2-Contribution"><a href="#2-Contribution" class="headerlink" title="2.Contribution"></a>2.Contribution</h2><p>（1） PendingIntent分析（PIAnalyzer工具）：基于程序切片检测PendingIntent相关不安全代码<br>（2） PIAnalyzer评估及其有效性：发现了至少435个app在PendingIntent中包裹了至少一个隐式base intent，找到了1358个PendingIntent的不安全使用，包括70个严重的漏洞。平均一个app 13秒</p>
-<h2 id="3-Motivation"><a href="#3-Motivation" class="headerlink" title="3.Motivation"></a>3.Motivation</h2><p><strong>前提</strong>：原app有打电话的权限，而恶意app没有。<br>Listing 1.3中，任意一个定义了相应Intent filter的app都可以接受Listing 1.2中的implicitWrappingIntent，提取出PendingIntent并控制base intent，使其向收费短信发送短信。<br> <img src="/2018/01/12/PIAnalyzer/AppA.png" alt="title"><br> <img src="/2018/01/12/PIAnalyzer/AppB.png" alt="title"></p>
-<p>（1） 钓鱼攻击：如果PendingIntent包裹的base intent是隐式的，那么定义了相应intent filter的多个app都可以接收，这就需要用户选择一个app来接收。这种场景就可能被钓鱼app利用。<br>（2） 拒绝服务攻击：一般地，PendingIntent并不会被wrapping intent包裹起来，而是直接传递到系统组件中，这些组件会调用PendingIntent的send方法来触发base intent。恶意app可以注册一个组件来接收这个base intent执行拒绝服务攻击（这些Intent就不会被传递到目标组件中）<br>（3） 提权攻击：（Android 4所有版本都存在这个攻击,原因是在PendingIntent中使用了隐式base intent）</p>
-<p>Listing 1.4是 Android源码中addAccount的代码，一旦有app添加账户就会调用这里的addAccount函数，mPendingIntent会返回给注册了相应action的app，而这个app就可以在Android Setting的context下重写空的base intent，从而执行恶意行为。<br> <img src="/2018/01/12/PIAnalyzer/AddAccountSettings.png" alt="title"></p>
-<p>恶意应用请求添加账户类型，Android Setting 一旦接收到这个intent，就会执行addAccount函数，返回vulnerable PendingIntent。Listing 1.6是恶意应用的一个Activity，由于恶意软件注册成为AccountAuthenticator，所以接收到这个PendingIntent。随后，在第3行，它创建了一个vunlnintent来执行恢复出厂设置的操作，在第5行用vunlnintent作为更新后的base intent来触发PendingIntent，手机恢复出厂设置。<br> <img src="/2018/01/12/PIAnalyzer/Malicious.png" alt="title"></p>
-<h2 id="4-检测方法——PIAnalyzer"><a href="#4-检测方法——PIAnalyzer" class="headerlink" title="4.检测方法——PIAnalyzer"></a>4.检测方法——PIAnalyzer</h2><p>从smali代码中，采用程序切片方法寻找相关的不安全代码<br>（1）提取PendingIntent<br>寻找包裹base intent的函数：getActivity，getActivities，getBroadcast，getService。<br>（2）分析base intent<br>使用后向切片来找到base intent，并确定其是隐式的还是显式的，这篇文章只关注隐式base intent。<br>注：有6个函数可以使隐式intent变成显式的，setClass(), setClassName(), setComponent(), setPackage() and setSelector()<br>（3）分析PendingIntent<br>使用前向切片来寻找PendingIntent的使用方式：发送到系统组件中还是被包裹成另外一个intent。由于系统组件不会执行攻击，因此主要关注wrappingIntent<br>（4）wrappingIntent分析<br>使用后向切片来分析这个wrappingIntent是否是隐式的<br>（5）生成调用图<br>intent的整个调用链<br>（6）报告：有三种安全级别<br>secure: pendingIntent + 显式base intent<br>warning: pendingIntent + 隐式base intent + 发送给系统组件<br>vulnerablity: pendingIntent + 隐式base intent + 隐式wrappingIntent</p>
-<h2 id="5-Evaluation"><a href="#5-Evaluation" class="headerlink" title="5.Evaluation"></a>5.Evaluation</h2><p>数据集：Google Play上任选1000个应用<br>发现：435个app在PendingIntent中包裹了至少一个隐式base intent，找到了1358个PendingIntent的不安全使用，包括70个严重的漏洞。平均一个app 13秒。80%的 vulnerabilities和98%的warnings发生在第三方库中。<br>这些app申请权限的情况：279危险权限和273个普通权限<br>检查精确性：手工检查70中的10个，9个可以精确检查出来</p>
-<h2 id="6-Limitation"><a href="#6-Limitation" class="headerlink" title="6.Limitation"></a>6.Limitation</h2><p>静态分析的固有缺陷：无法检测反射、naive层以及运行时决定Intent是显式还是隐式的</p>
+        <p>《An Empirical Study of Web Resource Manipulation in Real-world Mobile Applications》<br>来源：USENIX 2018 (CCF A)<br>关键词：Android, Static Analysis, Web Resource Manipulation, Malicious intent<br>摘要：由于Android和IOS都允许应用程序注入JavaScript到WEB页面中，且web资源缺少同源访问控制，因此会导致XPM攻击(cross-principal manipulation)。此文章针对XPM攻击进行了研究，一方面定义并在现实app中研究了该威胁，另一方面设计了XPM的自动检测方案，其中在检测中引入了搜索引擎和自然语言处理部分。但此文章的重点不在于检测，而在于大规模的研究，最终提出了14个Finding。</p>
+<h2 id="1-针对问题："><a href="#1-针对问题：" class="headerlink" title="1.针对问题："></a>1.针对问题：</h2><p>静态检测Android与IOS中的WebView存在的attack——XPM (cross-principal manipulation)<br><strong>研究点</strong>：现实中的app到底有多少存在这个attack </p>
+<p><strong>XPM (cross-principal manipulation)</strong>：Android和iOS都有evaluateJavascript的API，允许host app注入JavaScript代码到Web页面中并得到结果。但是，这些web资源控制缺少同源访问控制，因此导致WebView的app的代码。例如，如果一个Host app通过webview加载“<a href="http://www.facebook.com”，那么它就可以使用evaluateJavascript" target="_blank" rel="noopener">www.facebook.com”，那么它就可以使用evaluateJavascript</a> API来在facebook页面中运行Javascript，从而得到facebook的数据。</p>
+<p>XPM如图所示，manipulating code（控制代码）通过Web Resource manipulate point（web资源控制点，即相关API）来控制Manipulated Web Resource。<br> <img src="/2018/10/28/WebResourceManipulation/XPM.png" alt="title"></p>
+<p><strong>Treat Model</strong>：如图所示是两个app之间通过web资源窃取cookie。App A是Facebook软件， App B是一个嵌入了facebook SDK登录功能的软件三个class, C1, C2和C3都会通过webview访问<a href="http://www.facebook.com，前两个都属于正常的，第三个则是app" target="_blank" rel="noopener">www.facebook.com，前两个都属于正常的，第三个则是app</a> B恶意收集facebook的cookie信息<br> <img src="/2018/10/28/WebResourceManipulation/Attacker.png" alt="title"></p>
+<p>两种攻击者：一是host app本身，二是host app使用的第三方库<br>Web Resource Manipulation APIs：作者列举了四个方面的13个API（包括Android和IOS），如表所示。<br> <img src="/2018/10/28/WebResourceManipulation/API.png" alt="title"></p>
+<h2 id="2-Contribution"><a href="#2-Contribution" class="headerlink" title="2.Contribution"></a>2.Contribution</h2><p>（1）将在Web资源控制中存在的威胁定义为XPM，并大规模地研究这种威胁在现实app中的存在<br>（2）设计了一个自动工具来检测Android中的XPM<br>（3）对80694个app进行了研究，说明XPM在现实app（Android和IOS）中的严重性</p>
+<h2 id="3-Chanllenge"><a href="#3-Chanllenge" class="headerlink" title="3.Chanllenge"></a>3.Chanllenge</h2><p>（1）一个app中存在多个principal<br>（2）字符串的混淆与缩写<br><strong>main ideas</strong>:<br>（1）使用代码特征来识别AP<br>（2）使用搜索引擎来对比AP与WP，并加入自然语言处理部分</p>
+<h2 id="4-检测方法——XPMChecker"><a href="#4-检测方法——XPMChecker" class="headerlink" title="4.检测方法——XPMChecker"></a>4.检测方法——XPMChecker</h2><p>（1）静态分析模块：使用flowdroid和soot构建ICFG，并寻找Web Resource Manipulation API及相关的context等信息<br>包含URL的提取（前向数据流分析）、string的分析（后向切片）、代码块的signature<br>（2）Principal识别模块：WP与AP的识别（判断是Host app代码还是Lib代码，寻找其是否出现在多个Lib中）<br>（3）XPMClassifier模块：根据相似性计算（图3所示公式）来判断AP与WP &lt;AP,WP&gt; 是否属于同一来源，判断标准是某个阈值ϴ。步骤如下：<br>    A.    去除&lt;AP,WP&gt;中的噪声词汇，如后缀或者停止词汇（get.appdog.com中的com），得到&lt;AP’,WP’&gt;<br>    B.    将AP’和WP’作为关键字在Google搜索引擎上搜索，并得到结果Rap和Rwp<br>    C.    使用词袋模型进行结果分段（忽略语法和词序），并转换成向量A和W<br>    D.    最后根据公式计算相似性，以阈值ϴ作为界限来判断是否存在XPM。相似性的计算公式如下所示：<br> <img src="/2018/10/28/WebResourceManipulation/Similarity.png" alt="title"></p>
+<h2 id="5-Evaluation"><a href="#5-Evaluation" class="headerlink" title="5.Evaluation"></a>5.Evaluation</h2><p>由于此文章重点在于分析现实app中存在的XPM，而不是检测方法，因此评估是以findings为主体。<br><strong>（1）XPMChecker的评估</strong><br>.静态分析模块：人工选择50个app并标注了36个web资源控制点，XPMChecker可自动识别其中的33个，另外3个是因为字符串加密或调用链太深<br>. Principal识别和分类模块：人工选择1000个app，并通过误报率和漏报率的交点得到阈值ϴ，结果如表4所示。<br> <img src="/2018/10/28/WebResourceManipulation/Result.png" alt="title"></p>
+<p><strong>（2）    XPM行为的普遍性</strong><br>Finding 1：49.2%的控制点都存在跨域（principal）<br>Finding 2：16.9%的app都有web控制资源，4.8%存在XPM<br>Finding 3：63.6%的XPM点来源于库<br>Finding 4：多于70%的XPM点都是控制流行web服务的<br>Finding 5：web contents和web addresses是最普遍的</p>
+<p><strong>（3）XPM的Breakdown</strong><br>Finding 6：大多数XPM行为对用户体验都是必要的<br>Finding 7：一些XPM行为部署认证模块的方式不安全<br>Finding 8：第一次确定了带有恶意intent的web资源控制行为，包含模仿认证模块、窃取用户账户及密码、窃取滥用cookie<br>Finding 9：恶意XPM行为在Android和IOS上都存在<br>Finding 10：大多数恶意XPM行为旨在攻击认证模块<br>Finding 11：恶意XPM行为已经影响了大量用户</p>
+<p><strong>缓解方案</strong>：<br>完全的webview隔离是不适用于大多数app的，但是可以采用细粒度的访问控制策略。</p>
+<h2 id="6-Limitation"><a href="#6-Limitation" class="headerlink" title="6.Limitation"></a>6.Limitation</h2><p>（1）XPMChecker并不能防止逃逸行为，如可以通过使用Java反射和混淆字符串来逃避检测<br>（2）静态分析工具固有的缺陷</p>
 
       
     </div>
@@ -381,9 +381,7 @@
           
             <a href="/tags/Android/" rel="tag"># Android</a>
           
-            <a href="/tags/Static-Analysis/" rel="tag"># Static Analysis</a>
-          
-            <a href="/tags/PendingIntent/" rel="tag"># PendingIntent</a>
+            <a href="/tags/XPM/" rel="tag"># XPM</a>
           
         </div>
       
@@ -396,14 +394,18 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2018/09/02/QQEmojiBug/" rel="next" title="QQ表情-脏话bug漏洞">
+                <i class="fa fa-chevron-left"></i> QQ表情-脏话bug漏洞
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/05/12/hello-world/" rel="prev" title="Hello World">
-                Hello World <i class="fa fa-chevron-right"></i>
+              <a href="/2018/12/08/CustomPermission/" rel="prev" title="CustomPermission">
+                CustomPermission <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -564,7 +566,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-针对问题："><span class="nav-number">1.</span> <span class="nav-text">1.针对问题：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Contribution"><span class="nav-number">2.</span> <span class="nav-text">2.Contribution</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Motivation"><span class="nav-number">3.</span> <span class="nav-text">3.Motivation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-检测方法——PIAnalyzer"><span class="nav-number">4.</span> <span class="nav-text">4.检测方法——PIAnalyzer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Evaluation"><span class="nav-number">5.</span> <span class="nav-text">5.Evaluation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Limitation"><span class="nav-number">6.</span> <span class="nav-text">6.Limitation</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-针对问题："><span class="nav-number">1.</span> <span class="nav-text">1.针对问题：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Contribution"><span class="nav-number">2.</span> <span class="nav-text">2.Contribution</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Chanllenge"><span class="nav-number">3.</span> <span class="nav-text">3.Chanllenge</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-检测方法——XPMChecker"><span class="nav-number">4.</span> <span class="nav-text">4.检测方法——XPMChecker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Evaluation"><span class="nav-number">5.</span> <span class="nav-text">5.Evaluation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Limitation"><span class="nav-number">6.</span> <span class="nav-text">6.Limitation</span></a></li></ol></div>
             
 
           </div>
