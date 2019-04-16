@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android,System Virtualization," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.市场上手机分身的情况如今市场上的手机厂商都逐渐增加了应用双开的功能，如小米，华为，OPPO。而在一个Android手机设备实现多个系统空间，即系统分身，系统之间互相隔离。有该功能的厂商有小米和华为。下面三张图是小米的系统分身和应用双开的截图。图2中的红框分别是应用双开和系统分身入口图标，图3是通过切换分身图标进入新系统中，没有任何原系统中的应用及数据。系统层虚拟化方案主要有Linux内核层和A">
+<meta name="keywords" content="Android,System Virtualization">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SystemVirtualization">
+<meta property="og:url" content="https://skylinelulu.github.io/2019/04/16/SystemVirtualization/index.html">
+<meta property="og:site_name" content="SkylineLulu">
+<meta property="og:description" content="1.市场上手机分身的情况如今市场上的手机厂商都逐渐增加了应用双开的功能，如小米，华为，OPPO。而在一个Android手机设备实现多个系统空间，即系统分身，系统之间互相隔离。有该功能的厂商有小米和华为。下面三张图是小米的系统分身和应用双开的截图。图2中的红框分别是应用双开和系统分身入口图标，图3是通过切换分身图标进入新系统中，没有任何原系统中的应用及数据。系统层虚拟化方案主要有Linux内核层和A">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://skylinelulu.github.io/2019/04/16/SystemVirtualization/Xiaomi1.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2019/04/16/SystemVirtualization/Xiaomi2.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2019/04/16/SystemVirtualization/Xiaomi3.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2019/04/16/SystemVirtualization/Graphite1.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2019/04/16/SystemVirtualization/Graphite2.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2019/04/16/SystemVirtualization/namespace.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2019/04/16/SystemVirtualization/Cells.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2019/04/16/SystemVirtualization/CellsInputsystem.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2019/04/16/SystemVirtualization/CellsRIL.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2019/04/16/SystemVirtualization/Condroid.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2019/04/16/SystemVirtualization/CondroidBinderVirtualization.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2019/04/16/SystemVirtualization/CondroidDisplayVirtualization.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2019/04/16/SystemVirtualization/CondroidWindowManager.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2019/04/16/SystemVirtualization/CondroidServiceSharing.png">
+<meta property="og:updated_time" content="2019-04-16T07:00:04.860Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SystemVirtualization">
+<meta name="twitter:description" content="1.市场上手机分身的情况如今市场上的手机厂商都逐渐增加了应用双开的功能，如小米，华为，OPPO。而在一个Android手机设备实现多个系统空间，即系统分身，系统之间互相隔离。有该功能的厂商有小米和华为。下面三张图是小米的系统分身和应用双开的截图。图2中的红框分别是应用双开和系统分身入口图标，图3是通过切换分身图标进入新系统中，没有任何原系统中的应用及数据。系统层虚拟化方案主要有Linux内核层和A">
+<meta name="twitter:image" content="https://skylinelulu.github.io/2019/04/16/SystemVirtualization/Xiaomi1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://skylinelulu.github.io/2019/04/16/SystemVirtualization/"/>
+
+
+
+
+
+  <title>SystemVirtualization | SkylineLulu</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SkylineLulu</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://skylinelulu.github.io/2019/04/16/SystemVirtualization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="SkylineLulu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SkylineLulu">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SystemVirtualization</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-16T14:32:25+08:00">
+                2019-04-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-市场上手机分身的情况"><a href="#1-市场上手机分身的情况" class="headerlink" title="1.市场上手机分身的情况"></a>1.市场上手机分身的情况</h2><p>如今市场上的手机厂商都逐渐增加了应用双开的功能，如小米，华为，OPPO。<br>而在一个Android手机设备实现多个系统空间，即系统分身，系统之间互相隔离。有该功能的厂商有小米和华为。<br>下面三张图是小米的系统分身和应用双开的截图。图2中的红框分别是应用双开和系统分身入口图标，图3是通过切换分身图标进入新系统中，没有任何原系统中的应用及数据。<br><img src="/2019/04/16/SystemVirtualization/Xiaomi1.png" alt="title"><br><img src="/2019/04/16/SystemVirtualization/Xiaomi2.png" alt="title"><br><img src="/2019/04/16/SystemVirtualization/Xiaomi3.png" alt="title"><br>系统层虚拟化方案主要有Linux内核层和Android framework层两种方案。小米和OPPO都在Linux内核层做的。其中，小米用的应该是加拿大软件公司Graphite Software的Secure Spaces技术，以下是官网截图。小米，酷派，联想，blackphone等手机都使用了Graphite的产品。<br><img src="/2019/04/16/SystemVirtualization/Graphite1.png" alt="title"><br><img src="/2019/04/16/SystemVirtualization/Graphite2.png" alt="title"><br>接下来介绍Linux内核层和Android framework层两种方案的具体实现。</p>
+<h2 id="2-2-Linux内核层解决方案"><a href="#2-2-Linux内核层解决方案" class="headerlink" title="2.2.    Linux内核层解决方案"></a>2.2.    Linux内核层解决方案</h2><p>《Cells: A Virtual Mobile Smartphone Architecture》<br>SOSP 2011 (ACM Symposium on Operating Systems Principles)<br>哥伦比亚大学 Jeremy Andrus, Christoffer Dall, Alexander Van’t Hof</p>
+<h3 id="应用场景："><a href="#应用场景：" class="headerlink" title="应用场景："></a>应用场景：</h3><p>哥伦比亚大学虚拟化研究室的这篇论文DEMO后来被以色列公司cellrox在2014年进行了商业化<br><a href="http://systems.cs.columbia.edu/projects/cells/" target="_blank" rel="noopener">哥伦比亚论文地址</a><br><a href="http://www.cellrox.com/" target="_blank" rel="noopener">Cellrox官网</a><br>2016年电子科技大学的一篇硕士毕业论文和这篇文章很相像，《基于安全容器的Android虚拟化技术研究》孙超群&amp;杨霞</p>
+<h3 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h3><p>关于namespace：<br>Linux Namespace是一种Linux Kernel提供的资源隔离方案，提供PID，Network，IPC，UTS，Mount，User六种资源的隔离，每个Namespace下的这些资源对于其他Namespace是不可见的。<br>一个进程可以同时属于多个Namespace。Linux Kernel、Namespace、Process之间的关系可以用下图描述。<br> <img src="/2019/04/16/SystemVirtualization/namespace.png" alt="title"></p>
+<h3 id="Design"><a href="#Design" class="headerlink" title="Design"></a>Design</h3><p>在Linux kernel层利用namespace + device proxy来实现虚拟android系统（VP）<br>每个VP都有私有的虚拟namespace<br>虚拟化标识符、内核接口和硬件资源，并将OS资源标识符映射到虚拟标识符上<br>虚拟化 文件系统路径、PID、IPC、网络接口和UID等，保证VP隔离</p>
+<p>foreground VP独占屏幕资源<br>background VP依然在后方运行，能够接受系统事件，并执行任务。<br>VP在电脑端生成和配置，通过USB线下载到手机上</p>
+<p>三种访问配置：<br>（1）no access：VP可限制某些权限，即使用户同意使用<br>（2）shared access：foreground VP和background VP可共享<br>（3）exclusive access：当foreground VP运行时，它独占所有资源，可防止信息泄露</p>
+<p>1.共享可读的系统文件，减少内存使用<br>2.隔离VP以及root namespace<br>（1）利用UID namespace虚拟化用户凭证<br>（2）在内核层用namespace隔离VP及其数据<br>（3）使用mount namespace隔离VP文件<br>（4）去除VP内创建设备节点的能力<br><img src="/2019/04/16/SystemVirtualization/Cells.png" alt="title"></p>
+<h3 id="1-Kernel-level-Device-Virtualization"><a href="#1-Kernel-level-Device-Virtualization" class="headerlink" title="1. Kernel-level Device Virtualization"></a>1. Kernel-level Device Virtualization</h3><p>提供 隔离+硬件资源多样化<br>kernel device namespace：在驱动层表示数据结构并注册回调函数。当device namespace状态转变的时候回调函数被调用<br>每个VP都有一个device namespace<br>（1）虚拟化内核接口<br>创建device driver wrapper，用于接收foreground VP的请求，并更新设备状态。如屏幕显示的Framebuffer<br>（2）修改设备子系统使其能感知device namespace，如图7的输入子系统<br>（3）修改设备驱动使其能感知device namespace，如Binder driver<br><img src="/2019/04/16/SystemVirtualization/CellsInputsystem.png" alt="title"></p>
+<h3 id="2-User-level-Device-Virtualization"><a href="#2-User-level-Device-Virtualization" class="headerlink" title="2. User-level Device Virtualization"></a>2. User-level Device Virtualization</h3><p>user device namespace proxy：虚拟化设备配置，比如wifi和电话配置。<br>root namespace用于管理VP及两种namespace，可访问整个文件系统。</p>
+<p>VP的启动：<br>CellD将挂载VP文件系统，将自己克隆到一个具有单独namespace的新进程中，并启动VP的init进程以启动用户空间环境。<br>CellD设置了一组IPC套接字，供VP中的进程与root namespace通信。<br>Cells利用LXC进行资源控制，以防止单个VP的资源不足。</p>
+<h3 id="A-Graphics"><a href="#A-Graphics" class="headerlink" title="A. Graphics"></a>A. Graphics</h3><p>Android的屏幕显示依赖于Linux framebuffer (FB)来实现<br>进程和GPU硬件可以读写屏幕内存</p>
+<ol>
+<li>Framebuffer<br>创建新的FB device driver mux_fb<br>进程通过ioctl控制FB硬件状态<br>foreground VP可访问屏幕内存和显示硬件，而background VP维持着虚拟硬件状态，并将输出保存到内存中的backing buffer中。<br>当foreground VP mmap一个打开的FB device，mux_fb驱动时，mux_fb驱动会将相关的屏幕内存映射到进程内存中<br>当background VP mmap一个打开的FB device，mux_fb驱动时，mux_fb驱动会将backing buffer映射到进程内存中</li>
+</ol>
+<p>foreground VP与background VP的切换过程：<br>交换屏幕内存和backing buffer，将backing buffer中的信息重新映射到FB，同步硬件状态，并将内存地址转换通知给GPU，以便它能更新内部图像内存映射。</p>
+<p>2.GPU<br>GPU独立图像内容+ FB屏幕内存虚拟化<br>当foreground VP使用GPU时，会导致屏幕内存的直接变化<br>当background VP使用GPU时，会导致backing buffer的变化</p>
+<h3 id="B-Power-Management"><a href="#B-Power-Management" class="headerlink" title="B. Power Management"></a>B. Power Management</h3><p>Cells通过namespace来虚拟化这个子系统<br>Android有三种电池管理的接口<br>（1）early suspend：允许驱动在设备suspend之前和resume之后接收通知<br>Cells通过禁止background VP初始化suspend操作来虚拟化这个子系统。<br>（2）frame buffer early suspend：将设备的suspend和resume状态展示到用户空间<br>Cells通过namespace来虚拟化这个子系统。background VP会一直认为设备在睡眠。当转换VP时，原来的background VP会感知到设备苏醒。降低电池使用度<br>（3）wake locks：有两种状态active和inactive，当inactive时，系统进入低电量模式或暂停。</p>
+<h3 id="C-Telephony"><a href="#C-Telephony" class="headerlink" title="C. Telephony"></a>C. Telephony</h3><p>虚拟化radio stack（射频协议栈），实现VP的电话隔离<br>由于Vendor RIL是闭源库，无法直接修改源码加入namespace，因此利用user device namespace proxy在原来的Radio Interface Layer上加了一个RIL Proxy，包括Cells RIL和CellD。<br>用于控制拨打和接收电话，使得可以接收background VP的来电<br>利用VoIP服务实现SIM卡复用<br><img src="/2019/04/16/SystemVirtualization/CellsRIL.png" alt="title"></p>
+<h3 id="D-Networking"><a href="#D-Networking" class="headerlink" title="D. Networking"></a>D. Networking</h3><p>内核层+用户层虚拟化<br>（1）核心网络资源虚拟化 network namespace<br>如IP地址，网络适配器，路由表和端口号<br>VP的虚拟标识符被转换成物理标识符<br>内核层实现网络和VP端Ethernet对的NAT转换，实现VP之间的网络隔离<br>（2）无线配置管理虚拟化<br>和Telephony一样，利用user device namespace proxy加入了一层代理，代替原有的无线网络配置库和RIL库。</p>
+<h2 id="3-Android-framework层解决方案"><a href="#3-Android-framework层解决方案" class="headerlink" title="3.Android framework层解决方案"></a>3.Android framework层解决方案</h2><p>《Condroid: A Container-based Virtualization Solution Adapted for Android Devices》<br>MobileCloud 2015<br>浙江大学 Lei Xu, Guoxi Li, Chuan Li, Weijie Sun, Wenzhi Chen, Zonghui Wang<br>项⽬本来有源码的后来取消掉了，剩下⽂档了。文档地址：<a href="http://condroid.github.io/" target="_blank" rel="noopener">http://condroid.github.io/</a></p>
+<h3 id="两种应用场景："><a href="#两种应用场景：" class="headerlink" title="两种应用场景："></a>两种应用场景：</h3><p>（1）公司监控员工设备，但是员工想保护隐私<br>（2）攻击需要支持员工的工作环境，在工作后Destroy，下一个工作日又进行恢复</p>
+<h3 id="方式"><a href="#方式" class="headerlink" title="方式"></a>方式</h3><p>（1）修改Android framework层，构建独立、安全、隔离的一个Android手机设备的多系统<br>（2）替代了Boionic库（Android的内核库）中不支持的函数<br>（3）由于安卓系统版本的不同替代了一些系统调用<br>（4）使用Android NDK toochain交叉编译<br>（5）重编译内核，融入namespace和cgroup</p>
+<h3 id="4个特征"><a href="#4个特征" class="headerlink" title="4个特征"></a>4个特征</h3><p>（1）基于namespace特征的资源隔离<br>namespace的目的：将一个特定的全局系统资源包装在一个抽象中，使命名空间中的进程觉得它们拥有自己的全局资源的独立实例。每个容器都感知不到其他容器。<br>（2）基于cgroup特征的资源控制<br>限制、说明和隔离流程组的资源使用<br>每个容器都有自己的资源区，不会被其他容器访问<br>（3）系统服务共享机制<br>/proc 文件系统<br>（4）文件系统共享机制<br>/system分区</p>
+<h3 id="与Cells的不同"><a href="#与Cells的不同" class="headerlink" title="与Cells的不同"></a>与Cells的不同</h3><p>Cells修改linux kernel层，Condroid主要修改Android framework层，更多虚拟化Binder子系统</p>
+<h3 id="Design-1"><a href="#Design-1" class="headerlink" title="Design"></a>Design</h3><p>基于容器的结构<br>内核层和用户层设备虚拟化结合<br>（1）每个容器都是一个独立的安卓系统<br>（2）Linux容器技术（Linux Container, LXC）是一种操作系统层的轻量级虚拟化技术，LXC的实现依赖Linux 内核中的NameSpace和Cgroups 机制， NameSpace机制为不同容器间提供了隔离性，Cgroups实现了对容器的资源进行配额。<br>（3）虚拟化 标识符和硬件资源<br>（4）host android是控制中心，不会安装任何下载的app<br><img src="/2019/04/16/SystemVirtualization/Condroid.png" alt="title"></p>
+<h3 id="Implementation-Details"><a href="#Implementation-Details" class="headerlink" title="Implementation Details"></a>Implementation Details</h3><h3 id="A-Binder-System-Virtualization"><a href="#A-Binder-System-Virtualization" class="headerlink" title="A. Binder System Virtualization"></a>A. Binder System Virtualization</h3><p>一个Android手机设备的多系统 Binder driver是ServiceManager, Service和apps的桥梁，他们通过在/dev/binder上使用syscall来传递request和response。<br>Condroid在内核初始化阶段注册一系列的virtual Binder devices。如Figure 2所示，Host提供主要的IPC组件（Binder Driver， ServiceManager），而在容器中的app通过virtual Binder Device与host的Binder进行通信。<br>Virtual Binder Driver主要有两个功能：<br>（1）将app在virtual binder driver上做的操作转给real binder driver<br>（2）如果操作是注册或请求服务，virtual driver会将service名改为Hash值，解决了命名冲突的问题<br><img src="/2019/04/16/SystemVirtualization/CondroidBinderVirtualization.png" alt="title"></p>
+<h3 id="B-Display-System-Virtualization"><a href="#B-Display-System-Virtualization" class="headerlink" title="B. Display System Virtualization"></a>B. Display System Virtualization</h3><p>Foreground container独占显示屏，但是background container的显示图像需要被及时更新和保存，以便切换系统时能及时显示实时图像。<br>Cells：在Linux kernel层虚拟化framebuffer device<br>ConDroid：在Android framework层修改WindowManager（控制window生命周期、输入时间、位置等参数的系统服务），WindowManager会将所有的window元数据发送给SurfaceFlinger，由SurfaceFlinger进行图形显示。<br><img src="/2019/04/16/SystemVirtualization/CondroidDisplayVirtualization.png" alt="title"><br>WindowManager的window stack决定了SurfaceFlinger会将哪个window显示在屏幕上。ConDroid通过修改container的偏移来进行屏幕切换。<br><img src="/2019/04/16/SystemVirtualization/CondroidWindowManager.png" alt="title"></p>
+<h3 id="C-Input-System-Virtualization"><a href="#C-Input-System-Virtualization" class="headerlink" title="C. Input System Virtualization"></a>C. Input System Virtualization</h3><p>拦截非当前系统的event事件，只有foreground container才能感知到用户输入<br>input manager有两个对象：mInputDisaptcher和mInputReader（修改对象）。mInputDisaptcher负责将输入事件分配到现在激活的窗口中，mInputReader负责监控输入事件。</p>
+<h3 id="D-Service-Sharing-Mechanism"><a href="#D-Service-Sharing-Mechanism" class="headerlink" title="D. Service Sharing Mechanism"></a>D. Service Sharing Mechanism</h3><p>有些服务是可以在多个container之间共享的，比如电池、wifi等，Condroid允许用户通过/proc文件系统定制共享服务。<br><img src="/2019/04/16/SystemVirtualization/CondroidServiceSharing.png" alt="title"></p>
+<h3 id="E-Filesystem-Sharing-Mechanism"><a href="#E-Filesystem-Sharing-Mechanism" class="headerlink" title="E. Filesystem Sharing Mechanism"></a>E. Filesystem Sharing Mechanism</h3><p>host共享只读文件及目录给各个container </p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/System-Virtualization/" rel="tag"># System Virtualization</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/12/PIAnalyzer/" rel="next" title="PIAnalyzer">
+                <i class="fa fa-chevron-left"></i> PIAnalyzer
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">SkylineLulu</p>
+              <p class="site-description motion-element" itemprop="description">在头顶上，有几千亿的光年。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/skylinelulu" target="_blank" title="GitHub">
+                      GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:skylinelulu@163.com" target="_blank" title="E-Mail">
+                      E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-globe"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://github.com/skylinelulu" title="Skylinelulu Github" target="_blank">Skylinelulu Github</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-市场上手机分身的情况"><span class="nav-number">1.</span> <span class="nav-text">1.市场上手机分身的情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-Linux内核层解决方案"><span class="nav-number">2.</span> <span class="nav-text">2.2.    Linux内核层解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#应用场景："><span class="nav-number">2.1.</span> <span class="nav-text">应用场景：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Background"><span class="nav-number">2.2.</span> <span class="nav-text">Background</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Design"><span class="nav-number">2.3.</span> <span class="nav-text">Design</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Kernel-level-Device-Virtualization"><span class="nav-number">2.4.</span> <span class="nav-text">1. Kernel-level Device Virtualization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-User-level-Device-Virtualization"><span class="nav-number">2.5.</span> <span class="nav-text">2. User-level Device Virtualization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-Graphics"><span class="nav-number">2.6.</span> <span class="nav-text">A. Graphics</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-Power-Management"><span class="nav-number">2.7.</span> <span class="nav-text">B. Power Management</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-Telephony"><span class="nav-number">2.8.</span> <span class="nav-text">C. Telephony</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#D-Networking"><span class="nav-number">2.9.</span> <span class="nav-text">D. Networking</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Android-framework层解决方案"><span class="nav-number">3.</span> <span class="nav-text">3.Android framework层解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#两种应用场景："><span class="nav-number">3.1.</span> <span class="nav-text">两种应用场景：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方式"><span class="nav-number">3.2.</span> <span class="nav-text">方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4个特征"><span class="nav-number">3.3.</span> <span class="nav-text">4个特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#与Cells的不同"><span class="nav-number">3.4.</span> <span class="nav-text">与Cells的不同</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Design-1"><span class="nav-number">3.5.</span> <span class="nav-text">Design</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Implementation-Details"><span class="nav-number">3.6.</span> <span class="nav-text">Implementation Details</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-Binder-System-Virtualization"><span class="nav-number">3.7.</span> <span class="nav-text">A. Binder System Virtualization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-Display-System-Virtualization"><span class="nav-number">3.8.</span> <span class="nav-text">B. Display System Virtualization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-Input-System-Virtualization"><span class="nav-number">3.9.</span> <span class="nav-text">C. Input System Virtualization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#D-Service-Sharing-Mechanism"><span class="nav-number">3.10.</span> <span class="nav-text">D. Service Sharing Mechanism</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#E-Filesystem-Sharing-Mechanism"><span class="nav-number">3.11.</span> <span class="nav-text">E. Filesystem Sharing Mechanism</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SkylineLulu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+<div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv"></span>
+</span>
+</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
