@@ -262,169 +262,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://skylinelulu.github.io/2019/10/15/DroidPill/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="SkylineLulu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="SkylineLulu">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/15/DroidPill/" itemprop="url">DroidPill</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-15T19:57:48+08:00">
-                2019-10-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Paper/" itemprop="url" rel="index">
-                    <span itemprop="name">Paper</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>《DroidPill: Pwn Your Daily-Use Apps》<br>来源：AsiaCCS 2017 (CCF C)<br>关键词：Mobile System Security; Android Malware; App Confusion Attack; App Virtualization<br>摘要：<br>  本文构建了安卓中的应用层虚拟化沙箱，相当于实现了一个应用层虚拟化框架，并基于该框架实现了一种新的攻击方式：App Confusion Attack。  </p>
-<h2 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1.Introduction"></a>1.Introduction</h2><p>Android malware可被分成以下四类：数据窃取、勒索软件、权限提升、远程控制。<br>除了最后一种是网络攻击外，其他三种都需要利用良性软件及其数据。</p>
-<h2 id="2-Virtualization-based-Attacks"><a href="#2-Virtualization-based-Attacks" class="headerlink" title="2. Virtualization-based Attacks"></a>2. Virtualization-based Attacks</h2><h3 id="2-1-App-attacks"><a href="#2-1-App-attacks" class="headerlink" title="2.1 App attacks"></a>2.1 App attacks</h3><p><strong>已有的攻击及其局限性</strong><br>（1）申请Android上的危险权限。–但是，应用数据不易获得。<br>（2）利用app本身存在的弱点攻击，如SQL注入。–应用漏洞很少。<br>（3）利用UI混淆攻击，如钓鱼。–UI混淆攻击行为限制<br>（4）重打包，并引诱用户安装。–大多数应用来源于正规市场，导致重打包不可行</p>
-<p><strong>App Confusion Attack</strong><br>DroidPill使用的两种攻击向量是：app shortcut manipulation和top activity preemption<br>目的是：用户不能识别出DroidPill和正常系统的区别</p>
-<p>相比于上述四种攻击，此攻击的优势在于<br>（1）malware可以通过虚拟环境完全掌控guest app的代码和数据<br>（2）部署于应用层，不需要对kernel层进行修改。因此攻击范围很广<br>（3）并不需要普通app的数据和代码。相比于重打包，不是灰色的</p>
-<h3 id="2-2-App-Virtualization"><a href="#2-2-App-Virtualization" class="headerlink" title="2.2 App Virtualization"></a>2.2 App Virtualization</h3><p>虚拟化方式可分成两类：inclusive和exclusive<br><strong>inclusive</strong>：<br>将guest app运行在sandbox app的虚拟环境中。可同时运行多个非系统app。模拟核心系统服务，如PackageManager和Activity Manager，从而管理多个guest app（guest app或它们之间的组件之间的IPC通信）。<br>App Object Transition（AOT）可以用来实现虚拟化。当app安装时，它在manifest文件中注册了一系列的组件，沙箱会创建guest app和已注册组件的map。会破坏UI完整性。<br><strong>exclusive</strong>：<br>只能加载固定的一组app。不需要虚拟化任何核心系统服务。sandbox app和guest app是同时安装的，尽管它也使用了AOT来部署虚拟化逻辑，但是map是在沙箱app创建时建立的，运行时不会改变。</p>
-<p>已有虚拟化方法的比较<br>Boxify和NJAS：其中sandbox service主要是安装虚拟环境，如hook代码；broker执行虚拟化逻辑和安全策略。<br><strong>Boxify</strong>： inclusive虚拟化，sandbox service和guest app使用isolated process标签，从而限制了权限的使用。sandbox service安装了GOT hook（Shim），重定向Binder IPC和guest app的系统调用到broker。broker主要是监控拦截系统调用。<br><img src="/2019/10/15/DroidPill/Boxify.png" alt="title"><br><strong>NJAS</strong>：exclusive虚拟化。guest app和broker进程有相同的权限。ptrace基于ptrace机制拦截监控guest app。<br>两个缺点：1）只能运行一个guest app。2）AOT不充足，对组件的代理不够完善。<br><img src="/2019/10/15/DroidPill/NJAS.png" alt="title"></p>
-<h2 id="3-Design"><a href="#3-Design" class="headerlink" title="3.Design"></a>3.Design</h2><h3 id="3-1-Design-rationale"><a href="#3-1-Design-rationale" class="headerlink" title="3.1 Design rationale"></a>3.1 Design rationale</h3><p>与上述两个沙箱的区别：1）他俩都需要监控。2）DroidPill要符合UI完整性要求，从而防止用户看出来真实环境与沙箱环境的区别。<br>broker和guest app是同一个进程。hook DVM和native层的GOT hook，同时可获得JAVA API的调用。<br>如果选用inclusive方法，1是会暴露自己的icon，2是要申请所有权限。<br>因此采用exclusive方法，基于特定的apk文件。相比NJAS，DroidPill可以在良性app中安装恶意代码。</p>
-<h3 id="3-2-System-overview"><a href="#3-2-System-overview" class="headerlink" title="3.2 System overview"></a>3.2 System overview</h3><p><img src="/2019/10/15/DroidPill/DroidPill.png" alt="title"><br>bait用于引诱用户安装恶意软件，包含了攻击向量。<br>constructor用于安装broker和加载guest app<br>broker负责虚拟化，调节OS和guest app之间的通信。hook DVM和native层</p>
-<p>隔离进程。为每个组件定制进程名（Manifest）。<br>相比NJAS，DroidPill的两个特性：1是进程隔离，2是选择性加载app。</p>
-<h3 id="3-3-Constructor"><a href="#3-3-Constructor" class="headerlink" title="3.3 Constructor"></a>3.3 Constructor</h3><p>（1）Guest app loading<br>一般是通过createPackageContext加载的其他app的代码，使用了CONTEXT INCLUDE CODE和CONTEXT IGNORE SECURITY标签。</p>
-<p>（2）Virtual execution context<br>在android中，android.app.LoadedApk用于在apk文件加载到内存中时存储apk的元数据，包括包名、代码加载器（ClassLoader）、资源（android.content.res.Resources和android.content.res.AssetManager）、数据文件路径等。<br>android.app.ContextImpl提供了与其他APP或者系统交互的接口，如连接到Android系统服务，启动activity和service，访问包数据等。</p>
-<p>每个组件都有自己的ContextImpl对象，但一个APP只有一个LoadedApk对象。</p>
-<p>DroidPill包括两层：native层和virtualization层<br><img src="/2019/10/15/DroidPill/DroidPill1.png" alt="title"><br>native layer——ContextImpl和LoadedApk（createPackageContext时调用）<br>virtualization layer——（加载broker的native库到内存时调用）</p>
-<h3 id="3-4-Broker"><a href="#3-4-Broker" class="headerlink" title="3.4 Broker"></a>3.4 Broker</h3><p> <strong>Public app objects</strong><br>每个package都有一个独特的UID。在manifest中定义，要去PM或其他系统服务注册来获取运行时操作。<br>（1）Component<br>（2）Authority<br>（3）Account Type，在线账户服务，与服务器进行账户认证<br>（4）Custom Permission，自定义权限<br>（5）Intent Action，隐式intent，DroidPill中的guest app和sandbox app时一样的，因此破坏了UI完整性。</p>
-<p><strong>Virtualization logic</strong><br>（1）为每个app创建进程名，同时在安装时向PM进行注册，创建object map<br>（2）broker使用map在运行时执行AOT。</p>
-<p>拦截Binder IPC。对比NJAS，NJAS只能拦截一中object，DroidPill拦截了所有五个object。<br>因此，NJAS不能实现隐式的intent action。<br>guest app和sandbox app有不同的UID，但是文件重定向guest app是sandbox app的子目录。</p>
-<h2 id="4-Attack-vectors"><a href="#4-Attack-vectors" class="headerlink" title="4.Attack vectors"></a>4.Attack vectors</h2><p>两种技术：<br>1.app shortcut manipulation<br>替换原app为新的shortcut，但是从通知栏启动的依然是原app。<br>2.top activity preemption<br>替换目标activity<br>三种得知ontop activity的方法：1）阅读系统日志；2）运行android.app.ActivityManager.getRunningTasks；3）通过获取proc文件进行侧信道攻击。<br>前两种方法不能在android 4.1和5.0上用。</p>
-<h2 id="5-Evaluation"><a href="#5-Evaluation" class="headerlink" title="5.Evaluation"></a>5.Evaluation</h2><p><strong>Case study</strong><br>1.浏览器chrome。获取所有的浏览记录和用户输入<br>2.云存储勒索软件dropbox。本地缓存文件的打开和写入。<br>3.应用市场客户端Xiaomi Market欺骗。替换从市场上下载的良性app为恶意app。hook startActivity拦截市场app向installer发送的Intent。修改URI。<br>4.VPN流量嗅探Betternet。结合tapjacking attack拦截VPN流量。<br>5.获取广告利益。</p>
-<h2 id="6-Discussion"><a href="#6-Discussion" class="headerlink" title="6.Discussion"></a>6.Discussion</h2><h3 id="6-1-Limitations"><a href="#6-1-Limitations" class="headerlink" title="6.1 Limitations"></a>6.1 Limitations</h3><p>(1)android版本仅限于4.4之前。<br>(2)不能加载付费软件<br>(3)申请很多权限<br>(4)不能拦截在native层与系统服务交互的软件<br>(5)点击系统通知，进去的依然是原始app<br>(6)进去是初始状态，且不能更新</p>
-<h3 id="6-2-Countermeasures"><a href="#6-2-Countermeasures" class="headerlink" title="6.2 Countermeasures"></a>6.2 Countermeasures</h3><p>（1）系统层面<br>获取包名、公司名、安全映像<br>（2）应用市场层面<br>开发者可将app分成两部分：boot loader app（安装在设备上）和library（主要功能，上传到Google license server）。但不能保证除Google Play外的应用市场</p>
-<p>本文的优势在于提出了一种新的应用层虚拟化技术，且攻击场景和案例多样化。并且提出了DroidPill相对于Boxify和NJAS的缺陷与优势。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://skylinelulu.github.io/2019/06/23/Application-levelVirtualization/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -694,6 +531,139 @@
 <h3 id="C-Input-System-Virtualization"><a href="#C-Input-System-Virtualization" class="headerlink" title="C. Input System Virtualization"></a>C. Input System Virtualization</h3><p>拦截非当前系统的event事件，只有foreground container才能感知到用户输入<br>input manager有两个对象：mInputDisaptcher和mInputReader（修改对象）。mInputDisaptcher负责将输入事件分配到现在激活的窗口中，mInputReader负责监控输入事件。</p>
 <h3 id="D-Service-Sharing-Mechanism"><a href="#D-Service-Sharing-Mechanism" class="headerlink" title="D. Service Sharing Mechanism"></a>D. Service Sharing Mechanism</h3><p>有些服务是可以在多个container之间共享的，比如电池、wifi等，Condroid允许用户通过/proc文件系统定制共享服务。<br><img src="/2019/04/16/SystemVirtualization/CondroidServiceSharing.png" alt="title"></p>
 <h3 id="E-Filesystem-Sharing-Mechanism"><a href="#E-Filesystem-Sharing-Mechanism" class="headerlink" title="E. Filesystem Sharing Mechanism"></a>E. Filesystem Sharing Mechanism</h3><p>host共享只读文件及目录给各个container </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://skylinelulu.github.io/2019/03/10/StateDroid/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="SkylineLulu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SkylineLulu">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/10/StateDroid/" itemprop="url">StateDroid</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-10T20:30:43+08:00">
+                2019-03-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>《StateDroid: Stateful Detection of Stealthy Attacks in Android Apps via Horn-Clause Verification》<br>来源：ACSAC 2018 (CCF C)<br>关键词：Android Malware; State transition; Automata; Horn-Clause<br>摘要：<br>  本文针对恶意软件的隐秘行为，使用霍恩语句自动生成apk的行为状态，并构建有限状态自动机进行恶意性的判断。</p>
+<h2 id="针对问题：-Android-app中的隐秘攻击的检测"><a href="#针对问题：-Android-app中的隐秘攻击的检测" class="headerlink" title="针对问题： Android app中的隐秘攻击的检测"></a>针对问题： Android app中的隐秘攻击的检测</h2><p>与传统的恶意行为相比，隐秘攻击通常会采取多余的措施来隐藏自身。<br>隐秘攻击的三个特征：<br>1.malware的attack会经历多个state<br>2.state的转换是由一系列的有序action组成<br>3.action包含对object的API操作，可能依赖API调用的特定顺序或者输入值</p>
+<h2 id="Challenge"><a href="#Challenge" class="headerlink" title="Challenge"></a>Challenge</h2><p>1.很多因素影响action的执行，比如object的API调用，API调用顺序和特定的输入值。<br>2.object可以被传递到多个class或者method中，因此不易追溯。需要基于调用的API来不断更新object状态。<br>3.攻击行为和API调用的结合并不固定</p>
+<h2 id="文章方法"><a href="#文章方法" class="headerlink" title="文章方法"></a>文章方法</h2><p>传统的控制流和数据流模型都无法捕获到此类攻击。由于隐秘攻击是按照一定顺序执行一系列action来完成的，而有限状态自动机可以描述攻击行为的顺序。因此本文针对隐秘攻击的状态转换 采用了两层有限状态自动机StateDroid 来实现攻击的自动化静态检测。<br>（1）在StateDroid的顶层状态机ASM(Attack State Mechine)中，节点代表状态（基于很多action的攻击状态），边代表状态的转换（action）。当攻击action链中的最后一个action被执行的时候，状态机就达到了终态。<br>（2）为追溯object的状态，提出了有限状态自动机的另一个层OSM(Object State Mechine)。如果API调用完成了action的功能，OSM会报告action的检测。本文又提取122个相关API语义，42个action的影响和恶意intent作为Horn clauses(合取范式)，来自动生成状态机。</p>
+<h2 id="contribution"><a href="#contribution" class="headerlink" title="contribution"></a>contribution</h2><p>（1）为检测隐秘攻击，设计了基于attack-action的两层有限状态自动机<br>（2）将安全问题与自动机等形式化语言相结合<br>（3）开源</p>
+<h2 id="Backgroud"><a href="#Backgroud" class="headerlink" title="Backgroud"></a>Backgroud</h2><p>Motivating example：Hehe malware的恶意行为：自动屏蔽来电，并设置设备响铃为静音模式，达到隐藏自身的目的。<br>（1）设置静音模式<br>（2）屏蔽来电。注册broadcast Receiver，一旦有来电，系统触发onReceive的回调来执行攻击行为<br>（3）恢复设备响铃模式</p>
+<h2 id="StateDroid"><a href="#StateDroid" class="headerlink" title="StateDroid"></a>StateDroid</h2><p>三个步骤及其主要对象：回调中的API call（包括输入参数值和object的状态）—— action（基于object状态的OSM）——attack(基于action的ASM)<br> <img src="/2019/03/10/StateDroid/StateDroid.png" alt="title"></p>
+<h3 id="1-API-Call-Detector"><a href="#1-API-Call-Detector" class="headerlink" title="1.API Call Detector"></a>1.API Call Detector</h3><p>生命周期模型——事件链——callback链——API调用链<br>（1）通过从生命周期模型中分析callback，根据callback的顺序（onCreate-onStart-onPostCreate-onResume-onPostResume），来检测可能触发attack的API调用序列<br>（2）将object或者primitive装入lookup table（stack）中作为OSM的初始状态。若API涉及action，则进入action detector中<br><em>每个生命周期模型都是一个状态机，状态代表组件的状态，转换代表生命周期callback
+</em>Android注册一系列的callback来管理组件的生命周期，并触发callback来回应UI事件和系统事件。这些callback会以特定顺序被触发。而attack会通过回调函数的API来触发。</p>
+<h3 id="2-Action-Detector"><a href="#2-Action-Detector" class="headerlink" title="2.Action Detector"></a>2.Action Detector</h3><p>输入：API调用链<br>目的：识别出可能实施攻击的action（设置静音模式，触发电话，屏蔽电话等）<br> <img src="/2019/03/10/StateDroid/ObjectStateMechine.png" alt="title"></p>
+<p>利用合取范式来格式化API和ACTION<br>（1）通过解析API手册提取出attack相关功能API，并生成合取范式。<br>（2）生成API 调用链的合取范式<br>（3）构建OSM:将action和API放入stack上，自动生成状态机</p>
+<h3 id="3-Attack-Detector"><a href="#3-Attack-Detector" class="headerlink" title="3.Attack Detector"></a>3.Attack Detector</h3><p> <img src="/2019/03/10/StateDroid/AttackStateMechine.png" alt="title"><br>state代表攻击状态<br>transition代表检测到的action（从action detector中获取）<br>终结状态表示存在attack<br>利用合取范式来格式化ACTION-effect和attack</p>
+<h2 id="评估"><a href="#评估" class="headerlink" title="评估"></a>评估</h2><p>数据集：1369个恶意软件和1505个Google Play软件<br><strong>1.Action Detector的有效性</strong><br>提取出604个action，无false positive<br>但是对混淆程度高，代码重排序，加入垃圾代码和对静态字符串做反射的无法检测。也无法检测动态加载的恶意代码。<br><strong>2.Attack Detector的有效性</strong><br>对于12个已知恶意行为的app，无false positive和false negative<br>对于135个隐秘攻击，30%是基于action链的攻击<br>对于1505个良性app，有117个有隐秘攻击行为<br><strong>3.与其他工具的对比</strong><br>49个恶意样本<br>与AsDroid相比，检测到的action更多，检测到的泄露信息的样本更多<br>statedroid与flowdroid和dexteroid相比，分别检测出114,28,112个attack提醒。其中，dexteroid含有11个false positive,statedroid找到了6个新攻击。<br><strong>4.overhead</strong><br>检测一个app平均需要214秒，主要用于API CALL DETETCTOR中</p>
+<p>本文的启发在于从Android的生命周期和回调机制出发，由一系列action推导出存在的attack。首先该文章从1275个已知的恶意软件中提取action和attack，构成集合，再去在有限自动机中检测恶意action的存在。</p>
 
           
         
@@ -1871,7 +1841,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">18</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

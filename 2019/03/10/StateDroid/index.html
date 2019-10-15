@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Android,Static Analysis,PendingIntent," />
+  <meta name="keywords" content="Android,automata," />
 
 
 
@@ -79,24 +79,22 @@
 
 
 
-<meta name="description" content="《PIAnalyzer: A Precise Approach for PendingIntent Vulnerability Analysis》来源：ESORICS 2018 (CCF B)关键词：Android, PendingIntent, Information flow control, Static analysis摘要：  本文总结归纳了不安全的PendingIntent的相关攻击，">
-<meta name="keywords" content="Android,Static Analysis,PendingIntent">
+<meta name="description" content="《StateDroid: Stateful Detection of Stealthy Attacks in Android Apps via Horn-Clause Verification》来源：ACSAC 2018 (CCF C)关键词：Android Malware; State transition; Automata; Horn-Clause摘要：  本文针对恶意软件的隐秘行为，使用霍">
+<meta name="keywords" content="Android,automata">
 <meta property="og:type" content="article">
-<meta property="og:title" content="PIAnalyzer">
-<meta property="og:url" content="https://skylinelulu.github.io/2019/01/12/PIAnalyzer/index.html">
+<meta property="og:title" content="StateDroid">
+<meta property="og:url" content="https://skylinelulu.github.io/2019/03/10/StateDroid/index.html">
 <meta property="og:site_name" content="SkylineLulu">
-<meta property="og:description" content="《PIAnalyzer: A Precise Approach for PendingIntent Vulnerability Analysis》来源：ESORICS 2018 (CCF B)关键词：Android, PendingIntent, Information flow control, Static analysis摘要：  本文总结归纳了不安全的PendingIntent的相关攻击，">
+<meta property="og:description" content="《StateDroid: Stateful Detection of Stealthy Attacks in Android Apps via Horn-Clause Verification》来源：ACSAC 2018 (CCF C)关键词：Android Malware; State transition; Automata; Horn-Clause摘要：  本文针对恶意软件的隐秘行为，使用霍">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://skylinelulu.github.io/2019/01/12/PIAnalyzer/PendingIntentCode.png">
-<meta property="og:image" content="https://skylinelulu.github.io/2019/01/12/PIAnalyzer/AppA.png">
-<meta property="og:image" content="https://skylinelulu.github.io/2019/01/12/PIAnalyzer/AppB.png">
-<meta property="og:image" content="https://skylinelulu.github.io/2019/01/12/PIAnalyzer/AddAccountSettings.png">
-<meta property="og:image" content="https://skylinelulu.github.io/2019/01/12/PIAnalyzer/Malicious.png">
-<meta property="og:updated_time" content="2019-03-29T07:24:49.362Z">
+<meta property="og:image" content="https://skylinelulu.github.io/2019/03/10/StateDroid/StateDroid.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2019/03/10/StateDroid/ObjectStateMechine.png">
+<meta property="og:image" content="https://skylinelulu.github.io/2019/03/10/StateDroid/AttackStateMechine.png">
+<meta property="og:updated_time" content="2019-10-15T12:47:40.003Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="PIAnalyzer">
-<meta name="twitter:description" content="《PIAnalyzer: A Precise Approach for PendingIntent Vulnerability Analysis》来源：ESORICS 2018 (CCF B)关键词：Android, PendingIntent, Information flow control, Static analysis摘要：  本文总结归纳了不安全的PendingIntent的相关攻击，">
-<meta name="twitter:image" content="https://skylinelulu.github.io/2019/01/12/PIAnalyzer/PendingIntentCode.png">
+<meta name="twitter:title" content="StateDroid">
+<meta name="twitter:description" content="《StateDroid: Stateful Detection of Stealthy Attacks in Android Apps via Horn-Clause Verification》来源：ACSAC 2018 (CCF C)关键词：Android Malware; State transition; Automata; Horn-Clause摘要：  本文针对恶意软件的隐秘行为，使用霍">
+<meta name="twitter:image" content="https://skylinelulu.github.io/2019/03/10/StateDroid/StateDroid.png">
 
 
 
@@ -126,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="https://skylinelulu.github.io/2019/01/12/PIAnalyzer/"/>
+  <link rel="canonical" href="https://skylinelulu.github.io/2019/03/10/StateDroid/"/>
 
 
 
 
 
-  <title>PIAnalyzer | SkylineLulu</title>
+  <title>StateDroid | SkylineLulu</title>
   
 
 
@@ -269,7 +267,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://skylinelulu.github.io/2019/01/12/PIAnalyzer/">
+    <link itemprop="mainEntityOfPage" href="https://skylinelulu.github.io/2019/03/10/StateDroid/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="SkylineLulu">
@@ -286,7 +284,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">PIAnalyzer</h1>
+          <h1 class="post-title" itemprop="name headline">StateDroid</h1>
         
 
         <div class="post-meta">
@@ -298,8 +296,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-12T20:06:51+08:00">
-                2019-01-12
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-10T20:30:43+08:00">
+                2019-03-10
               </time>
             
 
@@ -308,28 +306,6 @@
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Paper/" itemprop="url" rel="index">
-                    <span itemprop="name">Paper</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -358,20 +334,20 @@
       
 
       
-        <p>《PIAnalyzer: A Precise Approach for PendingIntent Vulnerability Analysis》<br>来源：ESORICS 2018 (CCF B)<br>关键词：Android, PendingIntent, Information flow control, Static analysis<br>摘要：<br>  本文总结归纳了不安全的PendingIntent的相关攻击，并对其进行静态检测。  </p>
-<h2 id="1-针对问题："><a href="#1-针对问题：" class="headerlink" title="1.针对问题："></a>1.针对问题：</h2><p>不安全的PendingIntent使用会导致拒绝服务、identity窃取和提权（获取系统权限以删除设备上的用户数据）等攻击，文章是第一个静态检测不安全的PendingIntent的。</p>
-<p><strong>PendingIntent</strong>：PendingIntent是Android组件间通信的一个特征。PendingIntent主要用来在某个事件完成后执行特定的Action。它持有一个base intent(已定义action)，由另一个应用程序执行，而却拥有原app的权限和identity。此时原app进程不一定在运行，但是PendingIntent运行起来就好像是原app在运行一样。<br> <img src="/2019/01/12/PIAnalyzer/PendingIntentCode.png" alt="title"></p>
-<p><strong>PendingIntent与Intent之间的区别</strong>：PendingIntent就是一个可以在特定事件触发后执行的Intent，运行在新的task中，它相比于Intent的优势在于自己携带有Context对象，这样它就不必依赖于某个activity和原进程才可以存在。</p>
-<p><strong>PendingIntent应用场景</strong>：PendingIntent一般用于设置闹铃或者通知栏提醒。比如，一个应用想要在未来的某个时间点得到系统的通知，它就将自己创建的一个PendingIntent发送给Notification Manager，之后Notification Manager会触发该PendingIntent，使得一个预先定义好的组件可以得到通知和执行。</p>
-<p><strong>安全问题</strong>：隐式Intent可以被接受端app更改到任意组件上，并且拥有原app的权限，则会导致在原app的context中任意代码执行。</p>
-<h2 id="2-Contribution"><a href="#2-Contribution" class="headerlink" title="2.Contribution"></a>2.Contribution</h2><p>（1） PendingIntent分析（PIAnalyzer工具）：基于程序切片检测PendingIntent相关不安全代码<br>（2） PIAnalyzer评估及其有效性：发现了至少435个app在PendingIntent中包裹了至少一个隐式base intent，找到了1358个PendingIntent的不安全使用，包括70个严重的漏洞。平均一个app 13秒</p>
-<h2 id="3-Motivation"><a href="#3-Motivation" class="headerlink" title="3.Motivation"></a>3.Motivation</h2><p><strong>前提</strong>：原app有打电话的权限，而恶意app没有。<br>Listing 1.3中，任意一个定义了相应Intent filter的app都可以接受Listing 1.2中的implicitWrappingIntent，提取出PendingIntent并控制base intent，使其向收费短信发送短信。<br> <img src="/2019/01/12/PIAnalyzer/AppA.png" alt="title"><br> <img src="/2019/01/12/PIAnalyzer/AppB.png" alt="title"></p>
-<p>（1） 钓鱼攻击：如果PendingIntent包裹的base intent是隐式的，那么定义了相应intent filter的多个app都可以接收，这就需要用户选择一个app来接收。这种场景就可能被钓鱼app利用。<br>（2） 拒绝服务攻击：一般地，PendingIntent并不会被wrapping intent包裹起来，而是直接传递到系统组件中，这些组件会调用PendingIntent的send方法来触发base intent。恶意app可以注册一个组件来接收这个base intent执行拒绝服务攻击（这些Intent就不会被传递到目标组件中）<br>（3） 提权攻击：（Android 4所有版本都存在这个攻击,原因是在PendingIntent中使用了隐式base intent）</p>
-<p>Listing 1.4是 Android源码中addAccount的代码，一旦有app添加账户就会调用这里的addAccount函数，mPendingIntent会返回给注册了相应action的app，而这个app就可以在Android Setting的context下重写空的base intent，从而执行恶意行为。<br> <img src="/2019/01/12/PIAnalyzer/AddAccountSettings.png" alt="title"></p>
-<p>恶意应用请求添加账户类型，Android Setting 一旦接收到这个intent，就会执行addAccount函数，返回vulnerable PendingIntent。Listing 1.6是恶意应用的一个Activity，由于恶意软件注册成为AccountAuthenticator，所以接收到这个PendingIntent。随后，在第3行，它创建了一个vunlnintent来执行恢复出厂设置的操作，在第5行用vunlnintent作为更新后的base intent来触发PendingIntent，手机恢复出厂设置。<br> <img src="/2019/01/12/PIAnalyzer/Malicious.png" alt="title"></p>
-<h2 id="4-检测方法——PIAnalyzer"><a href="#4-检测方法——PIAnalyzer" class="headerlink" title="4.检测方法——PIAnalyzer"></a>4.检测方法——PIAnalyzer</h2><p>从smali代码中，采用程序切片方法寻找相关的不安全代码<br>（1）提取PendingIntent<br>寻找包裹base intent的函数：getActivity，getActivities，getBroadcast，getService。<br>（2）分析base intent<br>使用后向切片来找到base intent，并确定其是隐式的还是显式的，这篇文章只关注隐式base intent。<br>注：有6个函数可以使隐式intent变成显式的，setClass(), setClassName(), setComponent(), setPackage() and setSelector()<br>（3）分析PendingIntent<br>使用前向切片来寻找PendingIntent的使用方式：发送到系统组件中还是被包裹成另外一个intent。由于系统组件不会执行攻击，因此主要关注wrappingIntent<br>（4）wrappingIntent分析<br>使用后向切片来分析这个wrappingIntent是否是隐式的<br>（5）生成调用图<br>intent的整个调用链<br>（6）报告：有三种安全级别<br>secure: pendingIntent + 显式base intent<br>warning: pendingIntent + 隐式base intent + 发送给系统组件<br>vulnerablity: pendingIntent + 隐式base intent + 隐式wrappingIntent</p>
-<h2 id="5-Evaluation"><a href="#5-Evaluation" class="headerlink" title="5.Evaluation"></a>5.Evaluation</h2><p>数据集：Google Play上任选1000个应用<br>发现：435个app在PendingIntent中包裹了至少一个隐式base intent，找到了1358个PendingIntent的不安全使用，包括70个严重的漏洞。平均一个app 13秒。80%的 vulnerabilities和98%的warnings发生在第三方库中。<br>这些app申请权限的情况：279危险权限和273个普通权限<br>检查精确性：手工检查70中的10个，9个可以精确检查出来</p>
-<h2 id="6-Limitation"><a href="#6-Limitation" class="headerlink" title="6.Limitation"></a>6.Limitation</h2><p>静态分析的固有缺陷：无法检测反射、naive层以及运行时决定Intent是显式还是隐式的</p>
+        <p>《StateDroid: Stateful Detection of Stealthy Attacks in Android Apps via Horn-Clause Verification》<br>来源：ACSAC 2018 (CCF C)<br>关键词：Android Malware; State transition; Automata; Horn-Clause<br>摘要：<br>  本文针对恶意软件的隐秘行为，使用霍恩语句自动生成apk的行为状态，并构建有限状态自动机进行恶意性的判断。</p>
+<h2 id="针对问题：-Android-app中的隐秘攻击的检测"><a href="#针对问题：-Android-app中的隐秘攻击的检测" class="headerlink" title="针对问题： Android app中的隐秘攻击的检测"></a>针对问题： Android app中的隐秘攻击的检测</h2><p>与传统的恶意行为相比，隐秘攻击通常会采取多余的措施来隐藏自身。<br>隐秘攻击的三个特征：<br>1.malware的attack会经历多个state<br>2.state的转换是由一系列的有序action组成<br>3.action包含对object的API操作，可能依赖API调用的特定顺序或者输入值</p>
+<h2 id="Challenge"><a href="#Challenge" class="headerlink" title="Challenge"></a>Challenge</h2><p>1.很多因素影响action的执行，比如object的API调用，API调用顺序和特定的输入值。<br>2.object可以被传递到多个class或者method中，因此不易追溯。需要基于调用的API来不断更新object状态。<br>3.攻击行为和API调用的结合并不固定</p>
+<h2 id="文章方法"><a href="#文章方法" class="headerlink" title="文章方法"></a>文章方法</h2><p>传统的控制流和数据流模型都无法捕获到此类攻击。由于隐秘攻击是按照一定顺序执行一系列action来完成的，而有限状态自动机可以描述攻击行为的顺序。因此本文针对隐秘攻击的状态转换 采用了两层有限状态自动机StateDroid 来实现攻击的自动化静态检测。<br>（1）在StateDroid的顶层状态机ASM(Attack State Mechine)中，节点代表状态（基于很多action的攻击状态），边代表状态的转换（action）。当攻击action链中的最后一个action被执行的时候，状态机就达到了终态。<br>（2）为追溯object的状态，提出了有限状态自动机的另一个层OSM(Object State Mechine)。如果API调用完成了action的功能，OSM会报告action的检测。本文又提取122个相关API语义，42个action的影响和恶意intent作为Horn clauses(合取范式)，来自动生成状态机。</p>
+<h2 id="contribution"><a href="#contribution" class="headerlink" title="contribution"></a>contribution</h2><p>（1）为检测隐秘攻击，设计了基于attack-action的两层有限状态自动机<br>（2）将安全问题与自动机等形式化语言相结合<br>（3）开源</p>
+<h2 id="Backgroud"><a href="#Backgroud" class="headerlink" title="Backgroud"></a>Backgroud</h2><p>Motivating example：Hehe malware的恶意行为：自动屏蔽来电，并设置设备响铃为静音模式，达到隐藏自身的目的。<br>（1）设置静音模式<br>（2）屏蔽来电。注册broadcast Receiver，一旦有来电，系统触发onReceive的回调来执行攻击行为<br>（3）恢复设备响铃模式</p>
+<h2 id="StateDroid"><a href="#StateDroid" class="headerlink" title="StateDroid"></a>StateDroid</h2><p>三个步骤及其主要对象：回调中的API call（包括输入参数值和object的状态）—— action（基于object状态的OSM）——attack(基于action的ASM)<br> <img src="/2019/03/10/StateDroid/StateDroid.png" alt="title"></p>
+<h3 id="1-API-Call-Detector"><a href="#1-API-Call-Detector" class="headerlink" title="1.API Call Detector"></a>1.API Call Detector</h3><p>生命周期模型——事件链——callback链——API调用链<br>（1）通过从生命周期模型中分析callback，根据callback的顺序（onCreate-onStart-onPostCreate-onResume-onPostResume），来检测可能触发attack的API调用序列<br>（2）将object或者primitive装入lookup table（stack）中作为OSM的初始状态。若API涉及action，则进入action detector中<br><em>每个生命周期模型都是一个状态机，状态代表组件的状态，转换代表生命周期callback
+</em>Android注册一系列的callback来管理组件的生命周期，并触发callback来回应UI事件和系统事件。这些callback会以特定顺序被触发。而attack会通过回调函数的API来触发。</p>
+<h3 id="2-Action-Detector"><a href="#2-Action-Detector" class="headerlink" title="2.Action Detector"></a>2.Action Detector</h3><p>输入：API调用链<br>目的：识别出可能实施攻击的action（设置静音模式，触发电话，屏蔽电话等）<br> <img src="/2019/03/10/StateDroid/ObjectStateMechine.png" alt="title"></p>
+<p>利用合取范式来格式化API和ACTION<br>（1）通过解析API手册提取出attack相关功能API，并生成合取范式。<br>（2）生成API 调用链的合取范式<br>（3）构建OSM:将action和API放入stack上，自动生成状态机</p>
+<h3 id="3-Attack-Detector"><a href="#3-Attack-Detector" class="headerlink" title="3.Attack Detector"></a>3.Attack Detector</h3><p> <img src="/2019/03/10/StateDroid/AttackStateMechine.png" alt="title"><br>state代表攻击状态<br>transition代表检测到的action（从action detector中获取）<br>终结状态表示存在attack<br>利用合取范式来格式化ACTION-effect和attack</p>
+<h2 id="评估"><a href="#评估" class="headerlink" title="评估"></a>评估</h2><p>数据集：1369个恶意软件和1505个Google Play软件<br><strong>1.Action Detector的有效性</strong><br>提取出604个action，无false positive<br>但是对混淆程度高，代码重排序，加入垃圾代码和对静态字符串做反射的无法检测。也无法检测动态加载的恶意代码。<br><strong>2.Attack Detector的有效性</strong><br>对于12个已知恶意行为的app，无false positive和false negative<br>对于135个隐秘攻击，30%是基于action链的攻击<br>对于1505个良性app，有117个有隐秘攻击行为<br><strong>3.与其他工具的对比</strong><br>49个恶意样本<br>与AsDroid相比，检测到的action更多，检测到的泄露信息的样本更多<br>statedroid与flowdroid和dexteroid相比，分别检测出114,28,112个attack提醒。其中，dexteroid含有11个false positive,statedroid找到了6个新攻击。<br><strong>4.overhead</strong><br>检测一个app平均需要214秒，主要用于API CALL DETETCTOR中</p>
+<p>本文的启发在于从Android的生命周期和回调机制出发，由一系列action推导出存在的attack。首先该文章从1275个已知的恶意软件中提取action和attack，构成集合，再去在有限自动机中检测恶意action的存在。</p>
 
       
     </div>
@@ -391,9 +367,7 @@
           
             <a href="/tags/Android/" rel="tag"># Android</a>
           
-            <a href="/tags/Static-Analysis/" rel="tag"># Static Analysis</a>
-          
-            <a href="/tags/PendingIntent/" rel="tag"># PendingIntent</a>
+            <a href="/tags/automata/" rel="tag"># automata</a>
           
         </div>
       
@@ -406,8 +380,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/12/08/CustomPermission/" rel="next" title="CustomPermission">
-                <i class="fa fa-chevron-left"></i> CustomPermission
+              <a href="/2019/01/12/PIAnalyzer/" rel="next" title="PIAnalyzer">
+                <i class="fa fa-chevron-left"></i> PIAnalyzer
               </a>
             
           </div>
@@ -416,8 +390,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/03/10/StateDroid/" rel="prev" title="StateDroid">
-                StateDroid <i class="fa fa-chevron-right"></i>
+              <a href="/2019/04/16/SystemVirtualization/" rel="prev" title="SystemVirtualization">
+                SystemVirtualization <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -578,7 +552,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-针对问题："><span class="nav-number">1.</span> <span class="nav-text">1.针对问题：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Contribution"><span class="nav-number">2.</span> <span class="nav-text">2.Contribution</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Motivation"><span class="nav-number">3.</span> <span class="nav-text">3.Motivation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-检测方法——PIAnalyzer"><span class="nav-number">4.</span> <span class="nav-text">4.检测方法——PIAnalyzer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Evaluation"><span class="nav-number">5.</span> <span class="nav-text">5.Evaluation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Limitation"><span class="nav-number">6.</span> <span class="nav-text">6.Limitation</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#针对问题：-Android-app中的隐秘攻击的检测"><span class="nav-number">1.</span> <span class="nav-text">针对问题： Android app中的隐秘攻击的检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Challenge"><span class="nav-number">2.</span> <span class="nav-text">Challenge</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文章方法"><span class="nav-number">3.</span> <span class="nav-text">文章方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#contribution"><span class="nav-number">4.</span> <span class="nav-text">contribution</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Backgroud"><span class="nav-number">5.</span> <span class="nav-text">Backgroud</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#StateDroid"><span class="nav-number">6.</span> <span class="nav-text">StateDroid</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-API-Call-Detector"><span class="nav-number">6.1.</span> <span class="nav-text">1.API Call Detector</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Action-Detector"><span class="nav-number">6.2.</span> <span class="nav-text">2.Action Detector</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Attack-Detector"><span class="nav-number">6.3.</span> <span class="nav-text">3.Attack Detector</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#评估"><span class="nav-number">7.</span> <span class="nav-text">评估</span></a></li></ol></div>
             
 
           </div>
